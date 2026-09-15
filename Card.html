@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My DISC Souvenir Card Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- ไลบรารีสำหรับเซฟการ์ดเป็นรูปภาพ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #2b7bb9;
+      --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Prompt', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+      padding: 30px 24px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 500;
+      color: #334155;
+      font-size: 14px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #38bdf8;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .disc-section {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px;
+      margin: 18px 0;
+      border: 1px dashed #cbd5e1;
+    }
+
+    .disc-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #38bdf8, #0284c7);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    /* --- หน้าแสดงการ์ด (Card Layout) --- */
+    #card-view {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* กรอบการ์ดสไตล์ Souvenir */
+    .souvenir-card {
+      width: 360px;
+      min-height: 520px;
+      border-radius: 24px;
+      padding: 30px 24px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+      border: 4px solid #ffffff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* สไตล์ตามธาตุ DISC */
+    /* S - ธาตุน้ำ (เหมือนในภาพตัวอย่าง) */
+    .theme-water {
+      background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 40%, #e0f2fe 100%);
+      color: #1e3a8a;
+    }
+    /* D - ธาตุไฟ */
+    .theme-fire {
+      background: linear-gradient(180deg, #fee2e2 0%, #fff1f2 40%, #ffedd5 100%);
+      color: #991b1b;
+    }
+    /* I - ธาตุลม */
+    .theme-air {
+      background: linear-gradient(180deg, #fef3c7 0%, #fffbeb 40%, #fef9c3 100%);
+      color: #854d0e;
+    }
+    /* C - ธาตุดิน */
+    .theme-earth {
+      background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 40%, #ecfccb 100%);
+      color: #166534;
+    }
+
+    .card-header {
+      margin-top: 10px;
+    }
+
+    .card-icon {
+      font-size: 46px;
+      line-height: 1;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+    }
+
+    .card-title {
+      font-size: 15px;
+      letter-spacing: 1px;
+      font-weight: 600;
+      text-transform: uppercase;
+      opacity: 0.8;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+
+    .divider {
+      width: 60%;
+      height: 1px;
+      background: currentColor;
+      margin: 8px auto 16px;
+      opacity: 0.25;
+    }
+
+    .card-body {
+      margin: 10px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.7);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      margin-bottom: 4px;
+    }
+
+    .nickname {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .content-box {
+      font-size: 13.5px;
+      line-height: 1.5;
+      font-weight: 400;
+      padding: 0 10px;
+    }
+
+    .card-footer-decor {
+      font-size: 30px;
+      margin-top: 10px;
+      opacity: 0.85;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+      margin-top: 20px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-download {
+      background: #0284c7;
+      color: white;
+    }
+
+    .btn-back {
+      background: #f1f5f9;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- หน้าแบบฟอร์มตอบคำถาม -->
+    <div id="form-view">
+      <h2>✨ สร้างการ์ด DISC สะท้อนตัวตน</h2>
+      
+      <div class="form-group">
+        <label>1. ชื่อเล่น</label>
+        <input type="text" id="nickname" placeholder="เช่น วรรณ" required>
+      </div>
+
+      <div class="form-group">
+        <label>2. ปัจจุบัน / อาชีพ</label>
+        <input type="text" id="job" placeholder="เช่น หมอฟันที่ทำงานมา 30 ปีแล้ว" required>
+      </div>
+
+      <div class="form-group">
+        <label>3. ความตั้งใจในการร่วมกิจกรรมครั้งนี้</label>
+        <textarea id="intention" placeholder="เช่น มาเติมพลังกายและใจให้กับตัวเอง ปล่อยวางสิ่งที่ควบคุมไม่ได้"></textarea>
+      </div>
+
+      <!-- ส่วนคำถาม DISC สั้นๆ เพื่อจำแนกธาตุ -->
+      <div class="disc-section">
+        <div class="disc-title">🎯 สไตล์การทำงาน / การใช้ชีวิตของคุณใกล้เคียงข้อไหนที่สุด?</div>
+        <select id="discType">
+          <option value="S">💧 S - ธาตุน้ำ (ใจเย็น รับฟัง อ่อนโยน เข้าอกเข้าใจ ชอบความสงบ)</option>
+          <option value="D">🔥 D - ธาตุไฟ (กล้าตัดสินใจ มุ่งมั่น ลุย ชอบเป้าหมายที่ชัดเจน)</option>
+          <option value="I">🌬️ I - ธาตุลม (ร่าเริง มีพลัง สื่อสารเก่ง ชอบสร้างรอยยิ้มและมิตรภาพ)</option>
+          <option value="C">🌱 C - ธาตุดิน (ละเอียดรอบคอบ ช่างสังเกต มีหลักการ วางแผนเป็นระบบ)</option>
+        </select>
+      </div>
+
+      <button class="btn-submit" onclick="generateCard()">ออกการ์ดของฉัน ✨</button>
+    </div>
+
+    <!-- หน้าแสดงผลการ์ด -->
+    <div id="card-view">
+      <!-- การ์ดที่จะถูกจับภาพเป็น PNG -->
+      <div id="captureCard" class="souvenir-card theme-water">
+        <div class="card-header">
+          <div class="card-icon" id="cardIcon">💧</div>
+          <div class="card-title">My DISC Souvenir Card</div>
+          <div class="card-subtitle">✦ การ์ดสะท้อนตัวตน ✦</div>
+          <div class="divider"></div>
+        </div>
+
+        <div class="card-body">
+          <div>
+            <div class="badge" id="badgeName">💧 #ชื่อเล่น</div>
+            <div class="nickname" id="resNickname">วรรณ</div>
+          </div>
+
+          <div>
+            <div class="badge" id="badgeJob">💧 #ปัจจุบัน</div>
+            <div class="content-box" id="resJob">หมอฟันที่ทำงานมา 30 ปีแล้ว</div>
+          </div>
+
+          <div>
+            <div class="badge" id="badgeIntention">💧 #ความตั้งใจ</div>
+            <div class="content-box" id="resIntention">มาเติมพลังกายและใจให้กับตัวเอง</div>
+          </div>
+        </div>
+
+        <div class="card-footer-decor" id="cardDecor">🪷</div>
+      </div>
+
+      <!-- ปุ่มสั่งงาน -->
+      <div class="actions">
+        <button class="btn-action btn-back" onclick="backToForm()">แก้ไขข้อมูล</button>
+        <button class="btn-action btn-download" onclick="downloadImage()">บันทึกรูปภาพ 📥</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const themeConfig = {
+      'S': {
+        class: 'theme-water',
+        icon: '💧',
+        decor: '🪷',
+        tag: '💧'
+      },
+      'D': {
+        class: 'theme-fire',
+        icon: '🔥',
+        decor: '✨',
+        tag: '🔥'
+      },
+      'I': {
+        class: 'theme-air',
+        icon: '🌬️',
+        decor: '🌻',
+        tag: '🌬️'
+      },
+      'C': {
+        class: 'theme-earth',
+        icon: '🌱',
+        decor: '🌿',
+        tag: '🌱'
+      }
+    };
+
+    function generateCard() {
+      const name = document.getElementById('nickname').value.trim() || 'เพื่อนร่วมทาง';
+      const job = document.getElementById('job').value.trim() || '-';
+      const intention = document.getElementById('intention').value.trim() || '-';
+      const disc = document.getElementById('discType').value;
+
+      // เซ็ตข้อความ
+      document.getElementById('resNickname').innerText = name;
+      document.getElementById('resJob').innerText = job;
+      document.getElementById('resIntention').innerText = intention;
+
+      // ปรับแต่งตามธาตุ DISC
+      const conf = themeConfig[disc];
+      const card = document.getElementById('captureCard');
+      card.className = `souvenir-card ${conf.class}`;
+      document.getElementById('cardIcon').innerText = conf.icon;
+      document.getElementById('cardDecor').innerText = conf.decor;
+      document.getElementById('badgeName').innerText = `${conf.tag} #ชื่อเล่น`;
+      document.getElementById('badgeJob').innerText = `${conf.tag} #ปัจจุบัน`;
+      document.getElementById('badgeIntention').innerText = `${conf.tag} #ความตั้งใจ`;
+
+      // เปลี่ยนหน้า
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('card-view').style.display = 'flex';
+    }
+
+    function backToForm() {
+      document.getElementById('card-view').style.display = 'none';
+      document.getElementById('form-view').style.display = 'block';
+    }
+
+    function downloadImage() {
+      const cardElement = document.getElementById('captureCard');
+      
+      html2canvas(cardElement, {
+        scale: 3, // เพิ่มความคมชัดระดับ HD สำหรับปริ้นหรือแชร์
+        backgroundColor: null,
+        useCORS: true
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `DISC-Card-${document.getElementById('resNickname').innerText}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
