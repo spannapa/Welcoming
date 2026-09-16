@@ -1,411 +1,657 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My DISC Souvenir Card Generator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <!-- ไลบรารีสำหรับเซฟการ์ดเป็นรูปภาพ -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My DISC Souvenir Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF6EF;
+    --cream-deep: #F2EADB;
+    --ink: #1E2833;
+    --ink-soft: #63707E;
+    --gold: #C29B47;
+    --gold-light: #EFE4CA;
+    --gold-border: rgba(194, 155, 71, 0.4);
+    --white: #ffffff;
+    --shadow-soft: 0 20px 45px -15px rgba(28, 41, 56, 0.15);
+    --shadow-card: 0 25px 60px -18px rgba(25, 36, 49, 0.25);
+  }
 
-  <style>
-    :root {
-      --primary-color: #2b7bb9;
-      --bg-gradient: linear-gradient(135deg, #e0f2fe 0%, #f0fdf4 100%);
-    }
+  /* Color Schemes for Elements */
+  [data-el="fire"] {
+    --accent: #E25822;
+    --accent-dark: #A5360D;
+    --accent-soft: #FDE8DE;
+    --tint-top: #FFF3EB;
+    --glow: rgba(226, 88, 34, 0.25);
+  }
+  [data-el="wind"] {
+    --accent: #379777;
+    --accent-dark: #206750;
+    --accent-soft: #DCF2E9;
+    --tint-top: #EDF9F3;
+    --glow: rgba(55, 151, 119, 0.25);
+  }
+  [data-el="water"] {
+    --accent: #2B7FB3;
+    --accent-dark: #19567D;
+    --accent-soft: #D9ECF9;
+    --tint-top: #ECF5FC;
+    --glow: rgba(43, 127, 179, 0.25);
+  }
+  [data-el="earth"] {
+    --accent: #A06D3B;
+    --accent-dark: #6E461E;
+    --accent-soft: #EFE2D3;
+    --tint-top: #F9F3EC;
+    --glow: rgba(160, 109, 59, 0.25);
+  }
 
-    * {
-      box-sizing: border-box;
-      font-family: 'Prompt', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(80% 60% at 50% 0%, #F6ECE0 0%, #EDE4D3 100%);
+    color: var(--ink);
+    font-family: 'Noto Sans Thai', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 36px 16px 64px;
+  }
 
-    body {
-      background: var(--bg-gradient);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+  h1, h2, h3 { font-family: 'Noto Serif Thai', serif; margin: 0; }
+  button { font-family: inherit; cursor: pointer; }
+  .app-container { width: 100%; max-width: 440px; }
+  .hidden { display: none !important; }
 
-    .container {
-      width: 100%;
-      max-width: 520px;
-      background: #ffffff;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-      overflow: hidden;
-      padding: 30px 24px;
-    }
+  /* Card / Panel Base */
+  .panel {
+    background: var(--white);
+    border-radius: 26px;
+    padding: 32px 24px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid #EAE1D1;
+  }
 
-    h2 {
-      text-align: center;
-      color: #1e3a8a;
-      margin-bottom: 20px;
-      font-weight: 600;
-    }
+  .eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .intro-title { font-size: 26px; line-height: 1.35; color: var(--ink); font-weight: 700; }
+  .intro-sub { font-size: 14.5px; color: var(--ink-soft); margin-top: 10px; line-height: 1.6; }
 
-    .form-group {
-      margin-bottom: 16px;
-    }
+  /* Input Form */
+  .field { margin-top: 22px; text-align: left; }
+  .field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
+  .field input, .field textarea {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #E5DCCE;
+    background: transparent;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--ink);
+    padding: 10px 4px;
+    outline: none;
+    transition: border-color .25s ease;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent, #C29B47); }
+  .hint { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; }
 
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 500;
-      color: #334155;
-      font-size: 14px;
-    }
+  /* Buttons */
+  .primary-btn {
+    margin-top: 28px;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    transition: transform .15s ease, opacity .15s ease;
+  }
+  .primary-btn:hover { opacity: .92; }
+  .primary-btn:active { transform: scale(.98); }
+  .primary-btn:disabled { opacity: .35; cursor: not-allowed; }
 
-    input, textarea, select {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 14px;
-      outline: none;
-      transition: border 0.3s;
-    }
+  /* Quiz Step */
+  .quiz-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  .quiz-back {
+    width: 34px; height: 34px; border-radius: 50%;
+    border: 1.5px solid #E6DBC6; background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-soft); font-size: 18px;
+  }
+  .quiz-track { flex: 1; height: 7px; border-radius: 999px; background: #EFE8D7; overflow: hidden; }
+  .quiz-fill { height: 100%; background: var(--gold); width: 0%; transition: width .3s ease; }
+  .quiz-count { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+  .quiz-q { font-size: 19.5px; line-height: 1.5; margin-bottom: 22px; color: var(--ink); }
+  .options { display: flex; flex-direction: column; gap: 11px; }
+  .option {
+    text-align: left;
+    border: 1.5px solid #ECE3D0;
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 15px 16px;
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.45;
+    transition: all .2s ease;
+  }
+  .option:hover { border-color: var(--gold); transform: translateY(-1px); }
+  .option.selected { border-color: var(--gold); background: var(--gold-light); font-weight: 600; }
 
-    input:focus, textarea:focus, select:focus {
-      border-color: #38bdf8;
-    }
+  /* ===================================================
+     RESULT SOUVENIR CARD DESIGN
+  =================================================== */
+  .result-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+  
+  .card-frame {
+    position: relative;
+    width: 100%;
+    max-width: 390px;
+    border-radius: 28px;
+    background: linear-gradient(175deg, var(--tint-top) 0%, var(--white) 35%, var(--cream) 100%);
+    box-shadow: var(--shadow-card);
+    padding: 30px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    border: 1.5px solid var(--gold-border);
+  }
 
-    textarea {
-      resize: vertical;
-      min-height: 70px;
-    }
+  /* Decorative Ornaments */
+  .card-frame::before {
+    content: '';
+    position: absolute;
+    inset: 9px;
+    border: 1px dashed var(--gold-border);
+    border-radius: 20px;
+    pointer-events: none;
+  }
 
-    .disc-section {
-      background: #f8fafc;
-      border-radius: 12px;
-      padding: 14px;
-      margin: 18px 0;
-      border: 1px dashed #cbd5e1;
-    }
+  .glow-circle {
+    position: absolute;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
+    top: 5px;
+    pointer-events: none;
+  }
 
-    .disc-title {
-      font-weight: 600;
-      font-size: 14px;
-      color: #0f172a;
-      margin-bottom: 10px;
-    }
+  .corner-gem {
+    position: absolute;
+    font-size: 11px;
+    color: var(--gold);
+    opacity: 0.75;
+  }
+  .cg-tl { top: 18px; left: 18px; }
+  .cg-tr { top: 18px; right: 18px; }
+  .cg-bl { bottom: 18px; left: 18px; }
+  .cg-br { bottom: 18px; right: 18px; }
 
-    .btn-submit {
-      width: 100%;
-      background: linear-gradient(135deg, #38bdf8, #0284c7);
-      color: white;
-      border: none;
-      padding: 14px;
-      font-size: 16px;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
-      transition: transform 0.1s, opacity 0.2s;
-    }
+  /* Medallion */
+  .medallion-box {
+    position: relative;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    z-index: 2;
+  }
+  .medallion {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--accent-soft) 40%, var(--accent) 100%);
+    box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px var(--gold-border), 0 10px 22px var(--glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .medallion svg { width: 40px; height: 40px; }
 
-    .btn-submit:active {
-      transform: scale(0.98);
-    }
+  /* Titles */
+  .card-top-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    color: var(--accent-dark);
+    text-transform: uppercase;
+    z-index: 2;
+  }
+  .type-badge {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    background: var(--accent-soft);
+    color: var(--accent-dark);
+    font-size: 13px;
+    font-weight: 700;
+    z-index: 2;
+  }
 
-    /* --- หน้าแสดงการ์ด (Card Layout) --- */
-    #card-view {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-    }
+  /* User Content Block */
+  .card-content {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    z-index: 2;
+  }
 
-    /* กรอบการ์ดสไตล์ Souvenir */
-    .souvenir-card {
-      width: 360px;
-      min-height: 520px;
-      border-radius: 24px;
-      padding: 30px 24px;
-      text-align: center;
-      position: relative;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-      border: 4px solid #ffffff;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+  /* Name & Profession */
+  .person-info { text-align: center; }
+  .person-name {
+    font-family: 'Noto Serif Thai', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .person-job {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
 
-    /* สไตล์ตามธาตุ DISC */
-    /* S - ธาตุน้ำ (เหมือนในภาพตัวอย่าง) */
-    .theme-water {
-      background: linear-gradient(180deg, #dbeafe 0%, #f0f9ff 40%, #e0f2fe 100%);
-      color: #1e3a8a;
-    }
-    /* D - ธาตุไฟ */
-    .theme-fire {
-      background: linear-gradient(180deg, #fee2e2 0%, #fff1f2 40%, #ffedd5 100%);
-      color: #991b1b;
-    }
-    /* I - ธาตุลม */
-    .theme-air {
-      background: linear-gradient(180deg, #fef3c7 0%, #fffbeb 40%, #fef9c3 100%);
-      color: #854d0e;
-    }
-    /* C - ธาตุดิน */
-    .theme-earth {
-      background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 40%, #ecfccb 100%);
-      color: #166534;
-    }
+  /* Intent Box */
+  .intent-box {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(220, 210, 195, 0.6);
+    border-radius: 16px;
+    padding: 14px 16px;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(4px);
+  }
+  .intent-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    color: var(--accent-dark);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .intent-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+    word-break: break-word;
+  }
 
-    .card-header {
-      margin-top: 10px;
-    }
+  /* Trait Footer */
+  .type-desc-box {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(200, 185, 160, 0.5);
+    text-align: center;
+    width: 100%;
+    z-index: 2;
+  }
+  .trait-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--accent-dark);
+    margin-bottom: 4px;
+  }
+  .trait-desc {
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
 
-    .card-icon {
-      font-size: 46px;
-      line-height: 1;
-      margin-bottom: 8px;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-    }
-
-    .card-title {
-      font-size: 15px;
-      letter-spacing: 1px;
-      font-weight: 600;
-      text-transform: uppercase;
-      opacity: 0.8;
-    }
-
-    .card-subtitle {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 2px;
-    }
-
-    .divider {
-      width: 60%;
-      height: 1px;
-      background: currentColor;
-      margin: 8px auto 16px;
-      opacity: 0.25;
-    }
-
-    .card-body {
-      margin: 10px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 4px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      background: rgba(255, 255, 255, 0.7);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-      margin-bottom: 4px;
-    }
-
-    .nickname {
-      font-size: 26px;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .content-box {
-      font-size: 13.5px;
-      line-height: 1.5;
-      font-weight: 400;
-      padding: 0 10px;
-    }
-
-    .card-footer-decor {
-      font-size: 30px;
-      margin-top: 10px;
-      opacity: 0.85;
-    }
-
-    .actions {
-      display: flex;
-      gap: 12px;
-      width: 100%;
-      max-width: 360px;
-      margin-top: 20px;
-    }
-
-    .btn-action {
-      flex: 1;
-      padding: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-
-    .btn-download {
-      background: #0284c7;
-      color: white;
-    }
-
-    .btn-back {
-      background: #f1f5f9;
-      color: #475569;
-    }
-  </style>
+  /* Action Buttons */
+  .save-btn {
+    margin-top: 24px;
+    width: 100%;
+    max-width: 390px;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 15.5px;
+    font-weight: 600;
+    box-shadow: 0 8px 20px -6px rgba(30, 40, 51, 0.3);
+  }
+  .reset-btn {
+    margin-top: 10px;
+    width: 100%;
+    max-width: 390px;
+    padding: 13px;
+    border-radius: 14px;
+    background: transparent;
+    border: 1.5px solid #D9CEB9;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+</style>
 </head>
 <body>
+<div class="app-container">
 
-  <div class="container">
-    <!-- หน้าแบบฟอร์มตอบคำถาม -->
-    <div id="form-view">
-      <h2>✨ สร้างการ์ด DISC สะท้อนตัวตน</h2>
-      
-      <div class="form-group">
-        <label>1. ชื่อเล่น</label>
-        <input type="text" id="nickname" placeholder="เช่น วรรณ" required>
-      </div>
+  <!-- ================= STEP 1: FORM ================= -->
+  <section id="screen-intro" class="panel">
+    <div class="eyebrow">DISC Personality Card</div>
+    <h1 class="intro-title">ค้นพบธาตุประจำตัว และสร้างการ์ดของคุณ</h1>
+    <p class="intro-sub">กรอกข้อมูลสั้น ๆ เพื่อนำไปจัดวางบนของที่ระลึก พร้อมตอบคำถาม 8 ข้อเพื่อค้นพบธาตุแท้ในตัวคุณ</p>
 
-      <div class="form-group">
-        <label>2. ปัจจุบัน / อาชีพ</label>
-        <input type="text" id="job" placeholder="เช่น หมอฟันที่ทำงานมา 30 ปีแล้ว" required>
-      </div>
-
-      <div class="form-group">
-        <label>3. ความตั้งใจในการร่วมกิจกรรมครั้งนี้</label>
-        <textarea id="intention" placeholder="เช่น มาเติมพลังกายและใจให้กับตัวเอง ปล่อยวางสิ่งที่ควบคุมไม่ได้"></textarea>
-      </div>
-
-      <!-- ส่วนคำถาม DISC สั้นๆ เพื่อจำแนกธาตุ -->
-      <div class="disc-section">
-        <div class="disc-title">🎯 สไตล์การทำงาน / การใช้ชีวิตของคุณใกล้เคียงข้อไหนที่สุด?</div>
-        <select id="discType">
-          <option value="S">💧 S - ธาตุน้ำ (ใจเย็น รับฟัง อ่อนโยน เข้าอกเข้าใจ ชอบความสงบ)</option>
-          <option value="D">🔥 D - ธาตุไฟ (กล้าตัดสินใจ มุ่งมั่น ลุย ชอบเป้าหมายที่ชัดเจน)</option>
-          <option value="I">🌬️ I - ธาตุลม (ร่าเริง มีพลัง สื่อสารเก่ง ชอบสร้างรอยยิ้มและมิตรภาพ)</option>
-          <option value="C">🌱 C - ธาตุดิน (ละเอียดรอบคอบ ช่างสังเกต มีหลักการ วางแผนเป็นระบบ)</option>
-        </select>
-      </div>
-
-      <button class="btn-submit" onclick="generateCard()">ออกการ์ดของฉัน ✨</button>
+    <div class="field">
+      <label for="in-nickname">ชื่อเล่นของคุณ</label>
+      <input id="in-nickname" type="text" maxlength="30" placeholder="เช่น น้ำฝน, ภูมิ">
+    </div>
+    <div class="field">
+      <label for="in-job">อาชีพ / บทบาทปัจจุบัน</label>
+      <input id="in-job" type="text" maxlength="60" placeholder="เช่น Graphic Designer, ครู, ผู้บริหาร">
+    </div>
+    <div class="field">
+      <label for="in-intent">ความตั้งใจหรือเป้าหมายในครั้งนี้</label>
+      <textarea id="in-intent" rows="3" maxlength="150" placeholder="เช่น อยากเข้าใจมุมมองของคนอื่น เพื่อนำไปปรับใช้ในการทำงานร่วมกัน"></textarea>
+      <div class="hint">ข้อความนี้จะปรากฏบนการ์ดที่ระลึกของคุณ</div>
     </div>
 
-    <!-- หน้าแสดงผลการ์ด -->
-    <div id="card-view">
-      <!-- การ์ดที่จะถูกจับภาพเป็น PNG -->
-      <div id="captureCard" class="souvenir-card theme-water">
-        <div class="card-header">
-          <div class="card-icon" id="cardIcon">💧</div>
-          <div class="card-title">My DISC Souvenir Card</div>
-          <div class="card-subtitle">✦ การ์ดสะท้อนตัวตน ✦</div>
-          <div class="divider"></div>
-        </div>
+    <button class="primary-btn" id="btn-start" disabled>เริ่มทำแบบประเมิน DISC</button>
+  </section>
 
-        <div class="card-body">
-          <div>
-            <div class="badge" id="badgeName">💧 #ชื่อเล่น</div>
-            <div class="nickname" id="resNickname">วรรณ</div>
-          </div>
+  <!-- ================= STEP 2: QUIZ ================= -->
+  <section id="screen-quiz" class="panel hidden">
+    <div class="quiz-top">
+      <button class="quiz-back" id="btn-back" aria-label="ย้อนกลับ">‹</button>
+      <div class="quiz-track"><div class="quiz-fill" id="quiz-fill"></div></div>
+      <div class="quiz-count" id="quiz-count">1 / 8</div>
+    </div>
+    <h2 class="quiz-q" id="quiz-q"></h2>
+    <div class="options" id="quiz-options"></div>
+  </section>
 
-          <div>
-            <div class="badge" id="badgeJob">💧 #ปัจจุบัน</div>
-            <div class="content-box" id="resJob">หมอฟันที่ทำงานมา 30 ปีแล้ว</div>
-          </div>
+  <!-- ================= STEP 3: RESULT CARD ================= -->
+  <section id="screen-result" class="result-wrap hidden">
+    <div class="card-frame" id="resultCard" data-el="water">
+      <div class="glow-circle"></div>
+      
+      <!-- Ornaments -->
+      <span class="corner-gem cg-tl">✦</span>
+      <span class="corner-gem cg-tr">✦</span>
+      <span class="corner-gem cg-bl">✦</span>
+      <span class="corner-gem cg-br">✦</span>
 
-          <div>
-            <div class="badge" id="badgeIntention">💧 #ความตั้งใจ</div>
-            <div class="content-box" id="resIntention">มาเติมพลังกายและใจให้กับตัวเอง</div>
-          </div>
-        </div>
-
-        <div class="card-footer-decor" id="cardDecor">🪷</div>
+      <div class="medallion-box">
+        <div class="medallion" id="medallion"></div>
       </div>
 
-      <!-- ปุ่มสั่งงาน -->
-      <div class="actions">
-        <button class="btn-action btn-back" onclick="backToForm()">แก้ไขข้อมูล</button>
-        <button class="btn-action btn-download" onclick="downloadImage()">บันทึกรูปภาพ 📥</button>
+      <div class="card-top-title">DISC Identity Card</div>
+      <div class="type-badge" id="type-badge">ธาตุน้ำ · Steadiness</div>
+
+      <div class="card-content">
+        <div class="person-info">
+          <div class="person-name" id="out-nickname">-</div>
+          <div class="person-job" id="out-job">-</div>
+        </div>
+
+        <div class="intent-box">
+          <div class="intent-label">
+            <span>✦</span> ความตั้งใจ & เป้าหมาย <span>✦</span>
+          </div>
+          <div class="intent-text" id="out-intent">-</div>
+        </div>
+      </div>
+
+      <div class="type-desc-box">
+        <div class="trait-title" id="type-title">-</div>
+        <div class="trait-desc" id="type-desc">-</div>
       </div>
     </div>
-  </div>
 
-  <script>
-    const themeConfig = {
-      'S': {
-        class: 'theme-water',
-        icon: '💧',
-        decor: '🪷',
-        tag: '💧'
-      },
-      'D': {
-        class: 'theme-fire',
-        icon: '🔥',
-        decor: '✨',
-        tag: '🔥'
-      },
-      'I': {
-        class: 'theme-air',
-        icon: '🌬️',
-        decor: '🌻',
-        tag: '🌬️'
-      },
-      'C': {
-        class: 'theme-earth',
-        icon: '🌱',
-        decor: '🌿',
-        tag: '🌱'
-      }
-    };
+    <button class="save-btn" id="btn-save">บันทึกการ์ดเป็นรูปภาพ</button>
+    <button class="reset-btn" id="btn-reset">ทำแบบทดสอบใหม่</button>
+  </section>
 
-    function generateCard() {
-      const name = document.getElementById('nickname').value.trim() || 'เพื่อนร่วมทาง';
-      const job = document.getElementById('job').value.trim() || '-';
-      const intention = document.getElementById('intention').value.trim() || '-';
-      const disc = document.getElementById('discType').value;
+</div>
 
-      // เซ็ตข้อความ
-      document.getElementById('resNickname').innerText = name;
-      document.getElementById('resJob').innerText = job;
-      document.getElementById('resIntention').innerText = intention;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+(function(){
+  "use strict";
 
-      // ปรับแต่งตามธาตุ DISC
-      const conf = themeConfig[disc];
-      const card = document.getElementById('captureCard');
-      card.className = `souvenir-card ${conf.class}`;
-      document.getElementById('cardIcon').innerText = conf.icon;
-      document.getElementById('cardDecor').innerText = conf.decor;
-      document.getElementById('badgeName').innerText = `${conf.tag} #ชื่อเล่น`;
-      document.getElementById('badgeJob').innerText = `${conf.tag} #ปัจจุบัน`;
-      document.getElementById('badgeIntention').innerText = `${conf.tag} #ความตั้งใจ`;
+  var ICONS = {
+    fire: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-2 4-2 7a3 3 0 0 0 6 0c1.2 1 2 2.8 2 4.5A6 6 0 1 1 8 13.5C8 10 12 8 12 2Z"/></svg>',
+    wind: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a2.5 2.5 0 1 0-2.2-3.6"/><path d="M3 12h15a2.5 2.5 0 1 1-2.2 3.6"/><path d="M3 16h9a2 2 0 1 1-1.8 2.9"/></svg>',
+    water: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4 5 7 8.6 7 12.5A7 7 0 1 1 5 14.5C5 10.6 8 7 12 2Z"/></svg>',
+    earth: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 20h18L12 3Z"/><path d="M9 14h6"/></svg>'
+  };
 
-      // เปลี่ยนหน้า
-      document.getElementById('form-view').style.display = 'none';
-      document.getElementById('card-view').style.display = 'flex';
-    }
+  var TYPES = {
+    D: { el: 'fire',  elName: 'ไฟ',  enName: 'Dominance',        title: 'นักบุกเบิก & ผู้นำที่กล้าแกร่ง', desc: 'กล้าตัดสินใจ มุ่งเน้นผลลัพธ์ รวดเร็ว และพร้อมลุยทุกความท้าทาย' },
+    I: { el: 'wind',  elName: 'ลม',  enName: 'Influence',        title: 'นักสร้างพลังบวก & แรงบันดาลใจ', desc: 'มีชีวิตชีวา เข้าถึงง่าย สื่อสารเก่ง และสร้างบรรยากาศที่ดีให้คนรอบข้าง' },
+    S: { el: 'water', elName: 'น้ำ', enName: 'Steadiness',       title: 'นักประสานใจ & เพื่อนคู่คิด',   desc: 'รับฟังอย่างจริงใจ อบอุ่น ใจเย็น มั่นคง และพร้อมสนับสนุนทีมเสมอ' },
+    C: { el: 'earth', elName: 'ดิน', enName: 'Conscientiousness', title: 'นักคิดวิเคราะห์ & ผู้มีมาตรฐาน', desc: 'ละเอียดรอบคอบ มีแบบแผน ยึดมั่นในความถูกต้องและคุณภาพระดับสูง' }
+  };
 
-    function backToForm() {
-      document.getElementById('card-view').style.display = 'none';
-      document.getElementById('form-view').style.display = 'block';
-    }
+  var QUESTIONS = [
+    { q: "เมื่อเริ่มโปรเจกต์ใหม่ สิ่งแรกที่คุณมักจะทำคือ...", options: [
+      { t: "ลงมือทำทันทีและผลักดันให้ทุกคนเดินหน้า", y: "D" },
+      { t: "ชวนทุกคนมาคุย แบ่งปันไอเดียและสร้างแรงบันดาลใจ", y: "I" },
+      { t: "พูดคุย วางแผนอย่างเป็นขั้นเป็นตอนร่วมกับทีม", y: "S" },
+      { t: "ค้นหาข้อมูล ศึกษาความเสี่ยงและรายละเอียดอย่างถี่ถ้วน", y: "C" }
+    ]},
+    { q: "เมื่อเจอปัญหาเฉพาะหน้าหรือเรื่องด่วน คุณมักจะ...", options: [
+      { t: "ตัดสินใจแก้ปัญหาอย่างรวดเร็วและเด็ดขาด", y: "D" },
+      { t: "ปรึกษาผู้คน มองหาทางเลือกที่สร้างสรรค์ร่วมกัน", y: "I" },
+      { t: "ตั้งสติ รักษาความสงบ และค่อย ๆ ประนีประนอมคลี่คลาย", y: "S" },
+      { t: "วิเคราะห์สาเหตุของปัญหาด้วยตรรกะและข้อมูล", y: "C" }
+    ]},
+    { q: "ในสายตาคนรอบข้าง คุณมักจะถูกจดจำในฐานะ...", options: [
+      { t: "คนตรงไปตรงมา มุ่งมั่นสู่เป้าหมาย", y: "D" },
+      { t: "คนที่ร่าเริง เข้ากับคนง่าย มีพลังบวกเสมอ", y: "I" },
+      { t: "คนที่ใจเย็น รับฟัง และไว้วางใจได้เสมอ", y: "S" },
+      { t: "คนที่มีระเบียบ ละเอียดรอบคอบ และแม่นยำ", y: "C" }
+    ]},
+    { q: "สภาพแวดล้อมในการทำงานที่คุณชอบที่สุดคือแบบไหน...", options: [
+      { t: "มีอิสระในการตัดสินใจ ท้าทาย และเห็นผลลัพธ์ชัดเจน", y: "D" },
+      { t: "สนุกสนาน มีการแลกเปลี่ยน และไม่ตึงเครียดจนเกินไป", y: "I" },
+      { t: "ร่วมมือกันอย่างเป็นมิตร สบายใจ และปลอดภัยทางความรู้สึก", y: "S" },
+      { t: "มีระบบระเบียบ ชัดเจน และมีมาตรฐานคุณภาพสูง", y: "C" }
+    ]},
+    { q: "เมื่อต้องตัดสินใจเรื่องที่มีผลกระทบสูง คุณจะยึด...", options: [
+      { t: "เป้าหมายและผลลัพธ์ปลายทางเป็นหลัก", y: "D" },
+      { t: "ความรู้สึกและความคิดเห็นของคนที่เกี่ยวข้อง", y: "I" },
+      { t: "ความมั่นคงและความพร้อมของทุกคนในทีม", y: "S" },
+      { t: "ข้อเท็จจริง ข้อมูลสถิติ และความถูกต้อง", y: "C" }
+    ]},
+    { q: "สิ่งที่คุณรู้สึกอึดอัดใจมากที่สุดในการทำงานร่วมกับผู้อื่นคือ...", options: [
+      { t: "ความล่าช้า ไม่กล้าตัดสินใจ", y: "D" },
+      { t: "ความตึงเครียด ไร้ชีวิตชีวา หรือบรรยากาศกดดัน", y: "I" },
+      { t: "ความขัดแย้ง ความไม่แน่นอน และการเปลี่ยนแปลงกะทันหัน", y: "S" },
+      { t: "ความสะเพร่า ไร้ระบบ หรือทำงานไม่มีมาตรฐาน", y: "C" }
+    ]},
+    { q: "เวลาว่างที่คุณรู้สึกได้ชาร์จพลังอย่างแท้จริงคือ...", options: [
+      { t: "ทำกิจกรรมท้าทายใหม่ ๆ หรือโปรเจกต์ที่ตื่นเต้น", y: "D" },
+      { t: "ออกไปพบปะเพื่อนฝูง สังสรรค์และแลกเปลี่ยนเรื่องราว", y: "I" },
+      { t: "พักผ่อนสบาย ๆ กับคนใกล้ชิดหรืออยู่กับธรรมชาติ", y: "S" },
+      { t: "มีเวลาส่วนตัวในการอ่านหนังสือ พัฒนาทักษะที่สนใจ", y: "C" }
+    ]},
+    { q: "คุณคาดหวังอะไรมากที่สุดจากการรู้จักตนเองในครั้งนี้...", options: [
+      { t: "เพิ่มขีดความสามารถและพัฒนาสู่ความสำเร็จที่สูงขึ้น", y: "D" },
+      { t: "สร้างความสัมพันธ์และความประทับใจที่ดีกับผู้คน", y: "I" },
+      { t: "ค้นพบความสงบ สมดุล และเข้าใจผู้อื่นลึกซึ้งยิ่งขึ้น", y: "S" },
+      { t: "เข้าใจโครงสร้างความคิดและมีแนวทางพัฒนาที่เป็นระบบ", y: "C" }
+    ]}
+  ];
 
-    function downloadImage() {
-      const cardElement = document.getElementById('captureCard');
-      
-      html2canvas(cardElement, {
-        scale: 3, // เพิ่มความคมชัดระดับ HD สำหรับปริ้นหรือแชร์
-        backgroundColor: null,
-        useCORS: true
-      }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `DISC-Card-${document.getElementById('resNickname').innerText}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+  var state = {
+    nickname: "",
+    job: "",
+    intent: "",
+    answers: new Array(QUESTIONS.length).fill(null),
+    qi: 0
+  };
+
+  var screenIntro  = document.getElementById('screen-intro');
+  var screenQuiz   = document.getElementById('screen-quiz');
+  var screenResult = document.getElementById('screen-result');
+
+  var inNick   = document.getElementById('in-nickname');
+  var inJob    = document.getElementById('in-job');
+  var inIntent = document.getElementById('in-intent');
+  var btnStart = document.getElementById('btn-start');
+
+  function checkForm(){
+    btnStart.disabled = !(inNick.value.trim() && inJob.value.trim() && inIntent.value.trim());
+  }
+  [inNick, inJob, inIntent].forEach(function(el){ el.addEventListener('input', checkForm); });
+
+  btnStart.addEventListener('click', function(){
+    state.nickname = inNick.value.trim();
+    state.job = inJob.value.trim();
+    state.intent = inIntent.value.trim();
+    screenIntro.classList.add('hidden');
+    screenQuiz.classList.remove('hidden');
+    renderQuestion();
+  });
+
+  var quizFill    = document.getElementById('quiz-fill');
+  var quizCount   = document.getElementById('quiz-count');
+  var quizQ       = document.getElementById('quiz-q');
+  var quizOptions = document.getElementById('quiz-options');
+  var btnBack     = document.getElementById('btn-back');
+
+  function renderQuestion(){
+    var i = state.qi;
+    var item = QUESTIONS[i];
+    quizFill.style.width = Math.round((i / QUESTIONS.length) * 100) + '%';
+    quizCount.textContent = (i + 1) + ' / ' + QUESTIONS.length;
+    quizQ.textContent = item.q;
+    quizOptions.innerHTML = '';
+
+    item.options.forEach(function(opt){
+      var b = document.createElement('button');
+      b.className = 'option';
+      b.type = 'button';
+      b.textContent = opt.t;
+      if (state.answers[i] === opt.y) b.classList.add('selected');
+      b.addEventListener('click', function(){
+        selectOption(opt.y);
       });
+      quizOptions.appendChild(b);
+    });
+    btnBack.style.visibility = (i === 0) ? 'hidden' : 'visible';
+  }
+
+  function selectOption(letter){
+    state.answers[state.qi] = letter;
+    if (state.qi < QUESTIONS.length - 1) {
+      setTimeout(function(){
+        state.qi++;
+        renderQuestion();
+      }, 160);
+    } else {
+      quizFill.style.width = '100%';
+      setTimeout(showFinalCard, 220);
     }
-  </script>
+  }
+
+  btnBack.addEventListener('click', function(){
+    if (state.qi > 0) {
+      state.qi--;
+      renderQuestion();
+    }
+  });
+
+  function showFinalCard(){
+    var tally = { D: 0, I: 0, S: 0, C: 0 };
+    state.answers.forEach(function(ans){ if (ans) tally[ans]++; });
+    var topType = 'S', maxScore = -1;
+    ['D', 'I', 'S', 'C'].forEach(function(key){
+      if (tally[key] > maxScore) {
+        maxScore = tally[key];
+        topType = key;
+      }
+    });
+
+    renderCardData(topType);
+    screenQuiz.classList.add('hidden');
+    screenResult.classList.remove('hidden');
+  }
+
+  var resultCard = document.getElementById('resultCard');
+  var medallion  = document.getElementById('medallion');
+  var typeBadge  = document.getElementById('type-badge');
+  var typeTitle  = document.getElementById('type-title');
+  var typeDesc   = document.getElementById('type-desc');
+
+  function renderCardData(letter){
+    var meta = TYPES[letter];
+    resultCard.setAttribute('data-el', meta.el);
+    medallion.innerHTML = ICONS[meta.el];
+    typeBadge.textContent = 'ธาตุ' + meta.elName + ' · ' + meta.enName;
+    typeTitle.textContent = meta.title;
+    typeDesc.textContent = meta.desc;
+
+    document.getElementById('out-nickname').textContent = state.nickname;
+    document.getElementById('out-job').textContent = state.job;
+    document.getElementById('out-intent').textContent = state.intent;
+  }
+
+  document.getElementById('btn-reset').addEventListener('click', function(){
+    state = { nickname: "", job: "", intent: "", answers: new Array(QUESTIONS.length).fill(null), qi: 0 };
+    inNick.value = ''; inJob.value = ''; inIntent.value = '';
+    checkForm();
+    screenResult.classList.add('hidden');
+    screenIntro.classList.remove('hidden');
+  });
+
+  document.getElementById('btn-save').addEventListener('click', function(){
+    var btn = this;
+    var origText = btn.textContent;
+    btn.textContent = 'กำลังประมวลผลรูปภาพ...';
+    btn.disabled = true;
+
+    html2canvas(resultCard, {
+      scale: 3,
+      backgroundColor: null,
+      useCORS: true,
+      logging: false
+    }).then(function(canvas){
+      var link = document.createElement('a');
+      var safeName = (state.nickname || 'disc-card').replace(/[^a-zA-Z0-9ก-๙_-]+/g, '-');
+      link.download = 'DISC-Card-' + safeName + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      btn.textContent = origText;
+      btn.disabled = false;
+    }).catch(function(err){
+      console.error(err);
+      alert('บันทึกรูปไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
+      btn.textContent = origText;
+      btn.disabled = false;
+    });
+  });
+
+})();
+</script>
 </body>
 </html>
