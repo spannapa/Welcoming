@@ -3,431 +3,342 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My DISC Souvenir Card</title>
+<title>My Introduction Card</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Serif+Thai:wght@500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cream: #FAF6EF;
-    --cream-deep: #F2EADB;
-    --ink: #1E2833;
-    --ink-soft: #63707E;
-    --gold: #C29B47;
-    --gold-light: #EFE4CA;
-    --gold-border: rgba(194, 155, 71, 0.4);
-    --white: #ffffff;
-    --shadow-soft: 0 20px 45px -15px rgba(28, 41, 56, 0.15);
-    --shadow-card: 0 25px 60px -18px rgba(25, 36, 49, 0.25);
+  :root{
+    --cream:#FBF7EF;
+    --cream-deep:#F3ECDD;
+    --ink:#26333E;
+    --ink-soft:#67757F;
+    --gold:#C9A15A;
+    --gold-deep:#A9823F;
+    --gold-soft:#E9D9B3;
+    --white:#ffffff;
+    --shadow: 0 18px 40px -18px rgba(38,51,62,.35);
+  }
+  [data-el="fire"]{  --accent:#E4643B; --accent-deep:#B8492A; --accent-soft:#FBE1D4; --tint:#FDF0E8; }
+  [data-el="wind"]{  --accent:#C6A05C; --accent-deep:#96793E; --accent-soft:#F4E9CE; --tint:#FAF6EA; }
+  [data-el="water"]{ --accent:#3D86B8; --accent-deep:#235E85; --accent-soft:#D9ECF9; --tint:#EBF5FC; }
+  [data-el="earth"]{ --accent:#6E9463; --accent-deep:#4C6B43; --accent-soft:#DEEAD4; --tint:#F1F5EA; }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(60% 50% at 15% 0%, #F1E6CE55, transparent),
+      radial-gradient(50% 40% at 100% 100%, #DCEAF255, transparent),
+      var(--cream);
+    color:var(--ink);
+    font-family:'Noto Sans Thai', sans-serif;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+  h1,h2,h3{ font-family:'Noto Serif Thai', serif; margin:0; }
+  button{ font-family:inherit; cursor:pointer; }
+  .app{ width:100%; max-width:460px; }
+  .hidden{ display:none !important; }
+
+  /* ---------- shared ---------- */
+  .eyebrow{ font-size:13px; color:var(--ink-soft); letter-spacing:.02em; margin-bottom:6px; }
+  .panel{
+    background:var(--white); border-radius:22px; padding:28px 24px 26px;
+    box-shadow:var(--shadow); border:1px solid #EDE6D6;
+  }
+  .intro-title{ font-size:26px; line-height:1.35; color:var(--ink); }
+  .intro-sub{ font-size:14.5px; color:var(--ink-soft); margin-top:10px; line-height:1.6; }
+
+  /* ---------- form ---------- */
+  .field{ margin-top:22px; }
+  .field label{ display:block; font-size:14px; font-weight:600; margin-bottom:8px; color:var(--ink); }
+  .field .hint{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; }
+  .field input, .field textarea{
+    width:100%; border:none; border-bottom:2px solid #E4DCC6;
+    background:transparent; font-family:inherit; font-size:16px; color:var(--ink);
+    padding:9px 2px; outline:none; transition:border-color .2s ease; resize:none;
+  }
+  .field input:focus, .field textarea:focus{ border-color:#C9A15A; }
+  .primary-btn{
+    margin-top:28px; width:100%; padding:15px 18px; border:none; border-radius:14px;
+    background:var(--ink); color:var(--cream); font-size:15.5px; font-weight:600;
+    letter-spacing:.01em; transition:transform .15s ease, opacity .15s ease;
+  }
+  .primary-btn:hover{ opacity:.92; }
+  .primary-btn:active{ transform:scale(.98); }
+  .primary-btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .ghost-btn{
+    margin-top:12px; width:100%; padding:13px 18px; border-radius:14px;
+    background:transparent; border:1.5px solid #E4DCC6; color:var(--ink-soft); font-size:14.5px; font-weight:600;
   }
 
-  /* Color Schemes for Elements */
-  [data-el="fire"] {
-    --accent: #E25822;
-    --accent-dark: #A5360D;
-    --accent-soft: #FDE8DE;
-    --tint-top: #FFF3EB;
-    --glow: rgba(226, 88, 34, 0.25);
+  /* ---------- quiz ---------- */
+  .quiz-top{ display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+  .quiz-back{
+    width:34px; height:34px; border-radius:50%; border:1.5px solid #E4DCC6; background:var(--white);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0; color:var(--ink-soft);
   }
-  [data-el="wind"] {
-    --accent: #379777;
-    --accent-dark: #206750;
-    --accent-soft: #DCF2E9;
-    --tint-top: #EDF9F3;
-    --glow: rgba(55, 151, 119, 0.25);
+  .quiz-track{ flex:1; height:6px; border-radius:6px; background:#EFE8D8; overflow:hidden; }
+  .quiz-fill{ height:100%; background:var(--gold); border-radius:6px; transition:width .3s ease; width:0%; }
+  .quiz-count{ font-size:12.5px; color:var(--ink-soft); white-space:nowrap; }
+  .quiz-q{ font-size:20px; line-height:1.5; margin-bottom:20px; color:var(--ink); }
+  .options{ display:flex; flex-direction:column; gap:10px; }
+  .option{
+    text-align:left; border:1.5px solid #E9E2D0; background:var(--cream);
+    border-radius:14px; padding:14px 16px; font-size:15px; color:var(--ink);
+    line-height:1.5; transition:border-color .15s ease, background .15s ease;
   }
-  [data-el="water"] {
-    --accent: #2B7FB3;
-    --accent-dark: #19567D;
-    --accent-soft: #D9ECF9;
-    --tint-top: #ECF5FC;
-    --glow: rgba(43, 127, 179, 0.25);
-  }
-  [data-el="earth"] {
-    --accent: #A06D3B;
-    --accent-dark: #6E461E;
-    --accent-soft: #EFE2D3;
-    --tint-top: #F9F3EC;
-    --glow: rgba(160, 109, 59, 0.25);
-  }
+  .option:hover{ border-color:var(--gold); }
+  .option.selected{ border-color:var(--gold); background:var(--gold-soft); }
 
-  * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    min-height: 100vh;
-    background: radial-gradient(80% 60% at 50% 0%, #F6ECE0 0%, #EDE4D3 100%);
-    color: var(--ink);
-    font-family: 'Noto Sans Thai', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 36px 16px 64px;
-  }
+  /* ---------- result screen ---------- */
+  .result-wrap{ display:flex; flex-direction:column; align-items:center; }
+  .card-outer{ padding:14px; width:100%; display:flex; justify-content:center; }
 
-  h1, h2, h3 { font-family: 'Noto Serif Thai', serif; margin: 0; }
-  button { font-family: inherit; cursor: pointer; }
-  .app-container { width: 100%; max-width: 440px; }
-  .hidden { display: none !important; }
+  .card-frame{
+    position:relative;
+    width:100%;
+    max-width:400px;
+    border-radius:28px;
+    overflow:hidden;
+    background: linear-gradient(160deg, var(--tint) 0%, var(--cream) 42%, var(--accent-soft) 100%);
+    box-shadow:var(--shadow);
+    padding:36px 28px 28px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .card-frame::before{
+    content:''; position:absolute; inset:12px; border:1.3px solid var(--gold-soft); border-radius:20px; pointer-events:none;
+  }
+  .blob{ position:absolute; border-radius:50%; filter:blur(2px); opacity:.5; }
+  .b1{ width:130px; height:130px; background:radial-gradient(circle at 30% 30%, #fff, var(--accent-soft) 70%); top:-45px; left:-45px; }
+  .b2{ width:110px; height:110px; background:radial-gradient(circle at 30% 30%, #fff, var(--accent-soft) 70%); bottom:-35px; right:-35px; }
+  .bubble{ position:absolute; border-radius:50%; background:radial-gradient(circle at 32% 28%, #ffffffcc, var(--accent-soft) 65%, var(--accent-soft) 100%); box-shadow: inset 0 0 6px #ffffff90; }
+  .bub1{ width:18px; height:18px; top:56px; left:26px; }
+  .bub2{ width:11px; height:11px; top:84px; left:48px; }
+  .bub3{ width:14px; height:14px; bottom:130px; right:30px; }
 
-  /* Card / Panel Base */
-  .panel {
-    background: var(--white);
-    border-radius: 26px;
-    padding: 32px 24px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid #EAE1D1;
-  }
+  /* corner ornaments */
+  .corner{ position:absolute; width:44px; height:44px; opacity:.75; z-index:2; }
+  .corner-tl{ top:14px; left:14px; }
+  .corner-tr{ top:14px; right:14px; transform:scaleX(-1); }
+  .corner-bl{ bottom:14px; left:14px; transform:scaleY(-1); }
+  .corner-br{ bottom:14px; right:14px; transform:scale(-1,-1); }
 
-  .eyebrow {
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .intro-title { font-size: 26px; line-height: 1.35; color: var(--ink); font-weight: 700; }
-  .intro-sub { font-size: 14.5px; color: var(--ink-soft); margin-top: 10px; line-height: 1.6; }
+  .spark-top{ z-index:2; color:var(--gold-deep); font-size:15px; margin-bottom:2px; }
 
-  /* Input Form */
-  .field { margin-top: 22px; text-align: left; }
-  .field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--ink); }
-  .field input, .field textarea {
-    width: 100%;
-    border: none;
-    border-bottom: 2px solid #E5DCCE;
-    background: transparent;
-    font-family: inherit;
-    font-size: 16px;
-    color: var(--ink);
-    padding: 10px 4px;
-    outline: none;
-    transition: border-color .25s ease;
+  .medallion-wrap{ position:relative; margin-top:4px; z-index:2; }
+  .medallion{
+    width:80px; height:80px; border-radius:50%;
+    background: radial-gradient(circle at 32% 28%, #ffffff, var(--accent-soft) 45%, var(--accent) 100%);
+    box-shadow: 0 0 0 5px #ffffffb0, 0 0 0 7px var(--gold-soft), 0 12px 22px -8px var(--accent);
+    display:flex; align-items:center; justify-content:center;
   }
-  .field input:focus, .field textarea:focus { border-color: var(--accent, #C29B47); }
-  .hint { font-size: 12.5px; color: var(--ink-soft); margin-top: 6px; }
+  .medallion svg{ width:36px; height:36px; }
+  .ripple{ width:66px; height:13px; border:1.3px solid var(--accent-soft); border-radius:50%; margin:5px auto 0; opacity:.85; z-index:2; }
+  .ripple.r2{ width:92px; margin-top:4px; opacity:.5; }
 
-  /* Buttons */
-  .primary-btn {
-    margin-top: 28px;
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 14px;
-    background: var(--ink);
-    color: var(--cream);
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: .01em;
-    transition: transform .15s ease, opacity .15s ease;
-  }
-  .primary-btn:hover { opacity: .92; }
-  .primary-btn:active { transform: scale(.98); }
-  .primary-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .welcome-label{ z-index:2; font-family:'Cormorant Garamond', serif; font-style:italic; font-weight:600; font-size:20px; letter-spacing:.04em; color:var(--gold-deep); margin-top:16px; }
+  .card-name{ z-index:2; font-family:'Noto Serif Thai',serif; font-weight:700; font-size:36px; color:var(--accent-deep); margin-top:4px; line-height:1.15; text-align:center; word-break:break-word; }
+  .card-role{ z-index:2; font-family:'Noto Serif Thai',serif; font-size:14.5px; color:var(--ink-soft); margin-top:6px; letter-spacing:.02em; text-align:center; }
+  .card-el-desc{ z-index:2; font-size:13.5px; font-weight:600; color:var(--ink); text-align:center; margin-top:16px; line-height:1.7; padding:0 6px; }
 
-  /* Quiz Step */
-  .quiz-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-  .quiz-back {
-    width: 34px; height: 34px; border-radius: 50%;
-    border: 1.5px solid #E6DBC6; background: var(--white);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ink-soft); font-size: 18px;
-  }
-  .quiz-track { flex: 1; height: 7px; border-radius: 999px; background: #EFE8D7; overflow: hidden; }
-  .quiz-fill { height: 100%; background: var(--gold); width: 0%; transition: width .3s ease; }
-  .quiz-count { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
-  .quiz-q { font-size: 19.5px; line-height: 1.5; margin-bottom: 22px; color: var(--ink); }
-  .options { display: flex; flex-direction: column; gap: 11px; }
-  .option {
-    text-align: left;
-    border: 1.5px solid #ECE3D0;
-    background: var(--cream);
-    border-radius: 14px;
-    padding: 15px 16px;
-    font-size: 15px;
-    color: var(--ink);
-    line-height: 1.45;
-    transition: all .2s ease;
-  }
-  .option:hover { border-color: var(--gold); transform: translateY(-1px); }
-  .option.selected { border-color: var(--gold); background: var(--gold-light); font-weight: 600; }
+  .section-heading{ z-index:2; font-family:'Cormorant Garamond', serif; font-weight:600; font-size:19px; color:var(--gold-deep); margin-top:24px; letter-spacing:.02em; text-align:center; }
+  .section-text{ z-index:2; font-size:14px; color:var(--ink); text-align:center; margin-top:8px; line-height:1.75; padding:0 10px; }
 
-  /* ===================================================
-     RESULT SOUVENIR CARD DESIGN
-  =================================================== */
-  .result-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
-  
-  .card-frame {
-    position: relative;
-    width: 100%;
-    max-width: 390px;
-    border-radius: 28px;
-    background: linear-gradient(175deg, var(--tint-top) 0%, var(--white) 35%, var(--cream) 100%);
-    box-shadow: var(--shadow-card);
-    padding: 30px 24px 28px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    border: 1.5px solid var(--gold-border);
-  }
+  .divider{ z-index:2; display:flex; align-items:center; width:78%; margin-top:24px; }
+  .divider span{ flex:1; height:1px; background:var(--gold-soft); }
+  .divider i{ margin:0 10px; color:var(--gold-deep); font-style:normal; font-size:13px; }
 
-  /* Decorative Ornaments */
-  .card-frame::before {
-    content: '';
-    position: absolute;
-    inset: 9px;
-    border: 1px dashed var(--gold-border);
-    border-radius: 20px;
-    pointer-events: none;
-  }
+  .card-footer{ z-index:2; margin-top:16px; font-size:11.5px; color:var(--gold-deep); text-align:center; line-height:1.9; letter-spacing:.02em; }
 
-  .glow-circle {
-    position: absolute;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    background: radial-gradient(circle, var(--glow) 0%, transparent 70%);
-    top: 5px;
-    pointer-events: none;
-  }
+  .deco{ position:absolute; opacity:.5; pointer-events:none; z-index:1; }
+  .deco-leaf, .deco-feather, .deco-ember, .deco-swirl{ display:none; }
+  [data-el="earth"] .deco-leaf{ display:block; width:24px; bottom:200px; left:20px; transform:rotate(-15deg); }
+  [data-el="water"] .deco-feather{ display:block; width:20px; bottom:220px; right:24px; transform:rotate(20deg); }
+  [data-el="fire"] .deco-ember{ display:block; width:18px; bottom:210px; right:28px; }
+  [data-el="wind"] .deco-swirl{ display:block; width:22px; bottom:205px; left:26px; }
 
-  .corner-gem {
-    position: absolute;
-    font-size: 11px;
-    color: var(--gold);
-    opacity: 0.75;
+  .save-btn{
+    margin-top:22px; width:100%; max-width:400px; padding:15px 18px; border:none; border-radius:14px;
+    background:var(--ink); color:var(--cream); font-size:15.5px; font-weight:600;
   }
-  .cg-tl { top: 18px; left: 18px; }
-  .cg-tr { top: 18px; right: 18px; }
-  .cg-bl { bottom: 18px; left: 18px; }
-  .cg-br { bottom: 18px; right: 18px; }
+  .reset-btn{
+    margin-top:10px; width:100%; max-width:400px; padding:13px 18px; border-radius:14px;
+    background:transparent; border:1.5px solid #E4DCC6; color:var(--ink-soft); font-size:14.5px; font-weight:600;
+  }
+  .hint-save{ font-size:12.5px; color:var(--ink-soft); margin-top:14px; text-align:center; line-height:1.6; }
 
-  /* Medallion */
-  .medallion-box {
-    position: relative;
-    margin-top: 6px;
-    margin-bottom: 12px;
-    z-index: 2;
-  }
-  .medallion {
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #fff, var(--accent-soft) 40%, var(--accent) 100%);
-    box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 6px var(--gold-border), 0 10px 22px var(--glow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .medallion svg { width: 40px; height: 40px; }
 
-  /* Titles */
-  .card-top-title {
-    font-size: 13.5px;
-    font-weight: 600;
-    letter-spacing: .08em;
-    color: var(--accent-dark);
-    text-transform: uppercase;
-    z-index: 2;
+  /* ---------- admin ---------- */
+  .admin-top{
+    display:flex; justify-content:flex-end; margin-bottom:10px;
   }
-  .type-badge {
-    margin-top: 6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: var(--accent-dark);
-    font-size: 13px;
-    font-weight: 700;
-    z-index: 2;
+  .admin-btn{
+    border:1px solid #E4DCC6; background:#fffdf8; color:var(--ink-soft);
+    border-radius:999px; padding:7px 11px; font-size:11px; font-weight:600;
+    box-shadow:0 4px 12px -8px rgba(38,51,62,.4);
   }
+  .admin-btn:hover{ border-color:var(--gold); color:var(--ink); }
+  .admin-panel{ margin-top:12px; }
+  .admin-login{ margin-top:12px; }
+  .admin-login-title{ font-size:20px; margin-bottom:6px; }
+  .admin-login-sub{ font-size:13px; color:var(--ink-soft); line-height:1.6; }
+  .admin-password{ width:100%; margin-top:16px; padding:12px 13px; border:1.5px solid #E4DCC6; border-radius:12px; font:inherit; outline:none; }
+  .admin-password:focus{ border-color:var(--gold); }
+  .admin-login-actions{ display:flex; gap:8px; margin-top:12px; }
+  .admin-login-actions button{ flex:1; padding:12px; border-radius:12px; font:inherit; font-weight:600; border:1px solid #E4DCC6; }
+  .admin-login-submit{ background:var(--ink); color:var(--cream); border-color:var(--ink) !important; }
+  .admin-error{ min-height:18px; margin-top:8px; font-size:12px; color:#B8492A; }
+  .admin-locked{ display:none; }
+  .admin-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px; }
+  .admin-title{ font-size:21px; }
+  .admin-actions{ display:flex; gap:7px; flex-wrap:wrap; justify-content:flex-end; }
+  .admin-action{
+    border:1px solid #E4DCC6; background:var(--cream); color:var(--ink);
+    border-radius:10px; padding:8px 10px; font-size:12px; font-weight:600;
+  }
+  .admin-action.primary{ background:var(--ink); color:var(--cream); border-color:var(--ink); }
+  .admin-count{ font-size:12px; color:var(--ink-soft); margin:-7px 0 12px; }
+  .admin-table-wrap{ overflow:auto; border:1px solid #EDE6D6; border-radius:14px; }
+  .admin-table{ width:100%; border-collapse:collapse; min-width:820px; font-size:12px; }
+  .admin-table th,.admin-table td{ padding:10px 11px; border-bottom:1px solid #EEE8DA; text-align:left; vertical-align:top; }
+  .admin-table th{ background:#FAF6EA; color:var(--ink); font-weight:700; white-space:nowrap; }
+  .admin-table tr:last-child td{ border-bottom:none; }
+  .admin-empty{ padding:24px 12px; text-align:center; color:var(--ink-soft); font-size:13px; }
+  .type-pill{ display:inline-block; padding:3px 7px; border-radius:999px; background:var(--accent-soft); color:var(--accent-deep); font-weight:700; }
 
-  /* User Content Block */
-  .card-content {
-    width: 100%;
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-    z-index: 2;
-  }
-
-  /* Name & Profession */
-  .person-info { text-align: center; }
-  .person-name {
-    font-family: 'Noto Serif Thai', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1.25;
-  }
-  .person-job {
-    display: inline-block;
-    margin-top: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink-soft);
-  }
-
-  /* Intent Box */
-  .intent-box {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(220, 210, 195, 0.6);
-    border-radius: 16px;
-    padding: 14px 16px;
-    text-align: center;
-    position: relative;
-    backdrop-filter: blur(4px);
-  }
-  .intent-label {
-    font-size: 11.5px;
-    font-weight: 700;
-    letter-spacing: .03em;
-    color: var(--accent-dark);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-  .intent-text {
-    font-size: 14px;
-    line-height: 1.6;
-    color: var(--ink);
-    word-break: break-word;
-  }
-
-  /* Trait Footer */
-  .type-desc-box {
-    margin-top: 14px;
-    padding-top: 14px;
-    border-top: 1px dashed rgba(200, 185, 160, 0.5);
-    text-align: center;
-    width: 100%;
-    z-index: 2;
-  }
-  .trait-title {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--accent-dark);
-    margin-bottom: 4px;
-  }
-  .trait-desc {
-    font-size: 12.5px;
-    color: var(--ink-soft);
-    line-height: 1.5;
-  }
-
-  /* Action Buttons */
-  .save-btn {
-    margin-top: 24px;
-    width: 100%;
-    max-width: 390px;
-    padding: 15px;
-    border: none;
-    border-radius: 14px;
-    background: var(--ink);
-    color: var(--cream);
-    font-size: 15.5px;
-    font-weight: 600;
-    box-shadow: 0 8px 20px -6px rgba(30, 40, 51, 0.3);
-  }
-  .reset-btn {
-    margin-top: 10px;
-    width: 100%;
-    max-width: 390px;
-    padding: 13px;
-    border-radius: 14px;
-    background: transparent;
-    border: 1.5px solid #D9CEB9;
-    color: var(--ink-soft);
-    font-size: 14.5px;
-    font-weight: 600;
+  @media (max-width:380px){
+    .panel{ padding:22px 18px 20px; }
+    .intro-title{ font-size:23px; }
+    .card-name{ font-size:31px; }
   }
 </style>
 </head>
 <body>
-<div class="app-container">
+<div class="app">
+  <div class="admin-top">
+    <button class="admin-btn" id="btn-admin" type="button">⚙ Admin · ดูข้อมูล</button>
+  </div>
 
-  <!-- ================= STEP 1: FORM ================= -->
+  <!-- STEP 1: INTRO FORM -->
   <section id="screen-intro" class="panel">
-    <div class="eyebrow">DISC Personality Card</div>
-    <h1 class="intro-title">ค้นพบธาตุประจำตัว และสร้างการ์ดของคุณ</h1>
-    <p class="intro-sub">กรอกข้อมูลสั้น ๆ เพื่อนำไปจัดวางบนของที่ระลึก พร้อมตอบคำถาม 8 ข้อเพื่อค้นพบธาตุแท้ในตัวคุณ</p>
+    <div class="eyebrow"></div>
+    <h1 class="intro-title">มาทำความรู้จักกัน แล้วรับการ์ดประจำตัวคุณ</h1>
+    <p class="intro-sub">กรอกข้อมูลสั้น ๆ แล้วตอบคำถาม 4 ข้อ เพื่อดูว่าธาตุประจำตัวคุณคืออะไร พร้อมการ์ดที่มีชื่อคุณเองให้บันทึกเก็บไว้</p>
 
     <div class="field">
-      <label for="in-nickname">ชื่อเล่นของคุณ</label>
-      <input id="in-nickname" type="text" maxlength="30" placeholder="เช่น น้ำฝน, ภูมิ">
+      <label for="in-nickname">ชื่อเล่น</label>
+      <input id="in-nickname" type="text" maxlength="30" placeholder="เช่น น้ำฝน">
     </div>
     <div class="field">
-      <label for="in-job">อาชีพ / บทบาทปัจจุบัน</label>
-      <input id="in-job" type="text" maxlength="60" placeholder="เช่น Graphic Designer, ครู, ผู้บริหาร">
+      <label for="in-job">คุณเป็นใคร แนะนำตัวสั้น ๆ</label>
+      <input id="in-job" type="text" maxlength="60" placeholder="เช่น เป็นนักออกแบบ สบาย ๆ ชอบท่องเที่ยวและขนมหวาน">
     </div>
     <div class="field">
-      <label for="in-intent">ความตั้งใจหรือเป้าหมายในครั้งนี้</label>
-      <textarea id="in-intent" rows="3" maxlength="150" placeholder="เช่น อยากเข้าใจมุมมองของคนอื่น เพื่อนำไปปรับใช้ในการทำงานร่วมกัน"></textarea>
-      <div class="hint">ข้อความนี้จะปรากฏบนการ์ดที่ระลึกของคุณ</div>
+      <label for="in-intent">ความตั้งใจในการร่วมกิจกรรมครั้งนี้</label>
+      <textarea id="in-intent" rows="3" maxlength="160" placeholder="เช่น อยากเข้าใจตัวเองมากขึ้น และนำไปใช้ดูแลผู้อื่น"></textarea>
+      <div class="hint">พิมพ์สั้น ๆ พอสวยบนการ์ด (ไม่เกิน 160 ตัวอักษร)</div>
     </div>
 
-    <button class="primary-btn" id="btn-start" disabled>เริ่มทำแบบประเมิน DISC</button>
+    <button class="primary-btn" id="btn-start" disabled>เริ่มทำแบบทดสอบ</button>
   </section>
 
-  <!-- ================= STEP 2: QUIZ ================= -->
+  <!-- ADMIN LOGIN -->
+  <section id="screen-admin-login" class="panel admin-login hidden">
+    <div class="eyebrow">ADMIN</div>
+    <h2 class="admin-login-title">เข้าสู่ระบบ Admin</h2>
+    <div class="admin-login-sub">กรุณาใส่รหัสผ่านเพื่อดูข้อมูลผู้เข้าร่วมทั้งหมด</div>
+    <input id="admin-password" class="admin-password" type="password" inputmode="numeric" maxlength="3" placeholder="รหัสผ่าน 3 หลัก" autocomplete="off">
+    <div class="admin-error" id="admin-error"></div>
+    <div class="admin-login-actions">
+      <button type="button" id="btn-admin-login-cancel">กลับหน้าแรก</button>
+      <button type="button" class="admin-login-submit" id="btn-admin-login">เข้าสู่ Admin</button>
+    </div>
+  </section>
+
+  <!-- ADMIN: RESPONSES -->
+  <section id="screen-admin" class="panel admin-panel hidden">
+    <div class="admin-head">
+      <div>
+        <div class="eyebrow">ADMIN</div>
+        <h2 class="admin-title">ข้อมูลผู้เข้าร่วมทั้งหมด</h2>
+      </div>
+      <div class="admin-actions">
+        <button class="admin-action" id="btn-admin-back" type="button">กลับหน้าแรก</button>
+        <button class="admin-action primary" id="btn-download-data" type="button">ดาวน์โหลด CSV</button>
+      </div>
+    </div>
+    <div class="admin-count" id="admin-count">มีผู้กรอกข้อมูล 0 คน</div>
+    <div class="admin-table-wrap">
+      <div id="admin-table"></div>
+    </div>
+  </section>
+
+  <!-- STEP 2: QUIZ -->
   <section id="screen-quiz" class="panel hidden">
     <div class="quiz-top">
       <button class="quiz-back" id="btn-back" aria-label="ย้อนกลับ">‹</button>
       <div class="quiz-track"><div class="quiz-fill" id="quiz-fill"></div></div>
-      <div class="quiz-count" id="quiz-count">1 / 8</div>
+      <div class="quiz-count" id="quiz-count">1 / 4</div>
     </div>
     <h2 class="quiz-q" id="quiz-q"></h2>
     <div class="options" id="quiz-options"></div>
   </section>
 
-  <!-- ================= STEP 3: RESULT CARD ================= -->
+  <!-- STEP 3: RESULT -->
   <section id="screen-result" class="result-wrap hidden">
-    <div class="card-frame" id="resultCard" data-el="water">
-      <div class="glow-circle"></div>
-      
-      <!-- Ornaments -->
-      <span class="corner-gem cg-tl">✦</span>
-      <span class="corner-gem cg-tr">✦</span>
-      <span class="corner-gem cg-bl">✦</span>
-      <span class="corner-gem cg-br">✦</span>
+    <div class="card-outer">
+      <div class="card-frame" id="resultCard" data-el="water">
 
-      <div class="medallion-box">
-        <div class="medallion" id="medallion"></div>
-      </div>
+        <svg class="corner corner-tl" viewBox="0 0 60 60" fill="none" stroke="var(--gold)" stroke-width="1.2"><path d="M4 30 C4 14 14 4 30 4"/><circle cx="30" cy="4" r="2" fill="var(--gold)" stroke="none"/><path d="M4 30 C4 22 8 18 14 16"/><path d="M30 4 C22 4 18 8 16 14"/></svg>
+        <svg class="corner corner-tr" viewBox="0 0 60 60" fill="none" stroke="var(--gold)" stroke-width="1.2"><path d="M4 30 C4 14 14 4 30 4"/><circle cx="30" cy="4" r="2" fill="var(--gold)" stroke="none"/><path d="M4 30 C4 22 8 18 14 16"/><path d="M30 4 C22 4 18 8 16 14"/></svg>
+        <svg class="corner corner-bl" viewBox="0 0 60 60" fill="none" stroke="var(--gold)" stroke-width="1.2"><path d="M4 30 C4 14 14 4 30 4"/><circle cx="30" cy="4" r="2" fill="var(--gold)" stroke="none"/><path d="M4 30 C4 22 8 18 14 16"/><path d="M30 4 C22 4 18 8 16 14"/></svg>
+        <svg class="corner corner-br" viewBox="0 0 60 60" fill="none" stroke="var(--gold)" stroke-width="1.2"><path d="M4 30 C4 14 14 4 30 4"/><circle cx="30" cy="4" r="2" fill="var(--gold)" stroke="none"/><path d="M4 30 C4 22 8 18 14 16"/><path d="M30 4 C22 4 18 8 16 14"/></svg>
 
-      <div class="card-top-title">DISC Identity Card</div>
-      <div class="type-badge" id="type-badge">ธาตุน้ำ · Steadiness</div>
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="bubble bub1"></div>
+        <div class="bubble bub2"></div>
+        <div class="bubble bub3"></div>
 
-      <div class="card-content">
-        <div class="person-info">
-          <div class="person-name" id="out-nickname">-</div>
-          <div class="person-job" id="out-job">-</div>
+        <svg class="deco deco-leaf" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.3"><path d="M4 14c6-8 14-8 16-12-2 8-4 14-16 12Z"/></svg>
+        <svg class="deco deco-feather" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.3"><path d="M12 2c4 4 4 10 0 20M8 8c1 0 3 0 4-2M7 13c1.5 0 3.5-.3 5-2M6 18c2 0 4-.5 6-3"/></svg>
+        <svg class="deco deco-ember" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.3"><circle cx="8" cy="16" r="1.4"/><circle cx="14" cy="10" r="1"/><circle cx="17" cy="17" r="1.2"/></svg>
+        <svg class="deco deco-swirl" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.3"><path d="M4 12a8 8 0 1 1 8 8"/><path d="M8 12a4 4 0 1 0 4-4"/></svg>
+
+        <div class="spark-top">✦</div>
+        <div class="medallion-wrap">
+          <div class="medallion" id="medallion"></div>
         </div>
+        <div class="ripple"></div>
+        <div class="ripple r2"></div>
 
-        <div class="intent-box">
-          <div class="intent-label">
-            <span>✦</span> ความตั้งใจ & เป้าหมาย <span>✦</span>
-          </div>
-          <div class="intent-text" id="out-intent">-</div>
-        </div>
-      </div>
+        <div class="welcome-label">Welcome</div>
+        <h3 class="card-name" id="out-nickname"></h3>
+        <div class="card-role">- <span id="out-job"></span> -</div>
+        <div class="card-el-desc" id="type-desc"></div>
 
-      <div class="type-desc-box">
-        <div class="trait-title" id="type-title">-</div>
-        <div class="trait-desc" id="type-desc">-</div>
+        <div class="section-heading">Intention</div>
+        <div class="section-text" id="out-intent"></div>
+
+        <div class="section-heading">Your Compassionate Heart</div>
+        <div class="section-text" id="type-quote"></div>
+
+        <div class="divider"><span></span><i>✦</i><span></span></div>
+
+        <div class="card-footer">#enlightacademy</div>
       </div>
     </div>
 
-    <button class="save-btn" id="btn-save">บันทึกการ์ดเป็นรูปภาพ</button>
+    <button class="save-btn" id="btn-save">บันทึกเป็นรูปภาพ</button>
     <button class="reset-btn" id="btn-reset">ทำแบบทดสอบใหม่</button>
+    <div class="hint-save">กดปุ่มด้านบนเพื่อบันทึกการ์ดของคุณเป็นรูปภาพลงเครื่อง</div>
   </section>
 
 </div>
@@ -438,91 +349,197 @@
   "use strict";
 
   var ICONS = {
-    fire: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-2 4-2 7a3 3 0 0 0 6 0c1.2 1 2 2.8 2 4.5A6 6 0 1 1 8 13.5C8 10 12 8 12 2Z"/></svg>',
-    wind: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h11a2.5 2.5 0 1 0-2.2-3.6"/><path d="M3 12h15a2.5 2.5 0 1 1-2.2 3.6"/><path d="M3 16h9a2 2 0 1 1-1.8 2.9"/></svg>',
-    water: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4 5 7 8.6 7 12.5A7 7 0 1 1 5 14.5C5 10.6 8 7 12 2Z"/></svg>',
-    earth: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 3 20h18L12 3Z"/><path d="M9 14h6"/></svg>'
+    fire: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c1 3-2 4-2 7a3 3 0 0 0 6 0c1.2 1 2 2.8 2 4.5A6 6 0 1 1 8 13.5C8 10 12 8 12 2Z"/></svg>',
+    wind:  '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a5 5 0 1 1-5 5"/><path d="M7 9a3 3 0 1 0 3-3"/><path d="M4 15h10a2.5 2.5 0 1 1-2 4"/></svg>',
+    water: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4 5 7 8.6 7 12.5A7 7 0 1 1 5 14.5C5 10.6 8 7 12 2Z"/></svg>',
+    earth: '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="6"/><path d="M12 9c0-2.5 0-3.7 0-6"/><path d="M12 4.2c-1.6 0-3 1.1-3 2.8 1.7 0 3-1 3-2.8Z"/><path d="M12 5.4c1.5 0 2.7 1 2.7 2.5-1.5 0-2.7-.9-2.7-2.5Z"/></svg>'
   };
 
   var TYPES = {
-    D: { el: 'fire',  elName: 'ไฟ',  enName: 'Dominance',        title: 'นักบุกเบิก & ผู้นำที่กล้าแกร่ง', desc: 'กล้าตัดสินใจ มุ่งเน้นผลลัพธ์ รวดเร็ว และพร้อมลุยทุกความท้าทาย' },
-    I: { el: 'wind',  elName: 'ลม',  enName: 'Influence',        title: 'นักสร้างพลังบวก & แรงบันดาลใจ', desc: 'มีชีวิตชีวา เข้าถึงง่าย สื่อสารเก่ง และสร้างบรรยากาศที่ดีให้คนรอบข้าง' },
-    S: { el: 'water', elName: 'น้ำ', enName: 'Steadiness',       title: 'นักประสานใจ & เพื่อนคู่คิด',   desc: 'รับฟังอย่างจริงใจ อบอุ่น ใจเย็น มั่นคง และพร้อมสนับสนุนทีมเสมอ' },
-    C: { el: 'earth', elName: 'ดิน', enName: 'Conscientiousness', title: 'นักคิดวิเคราะห์ & ผู้มีมาตรฐาน', desc: 'ละเอียดรอบคอบ มีแบบแผน ยึดมั่นในความถูกต้องและคุณภาพระดับสูง' }
+    D: { el:'fire',  elName:'ไฟ',  desc:'นักขับเคลื่อน มุ่งมั่น เด็ดขาด กล้าตัดสินใจ',
+         quote:'บางครั้งการผ่อนคันเร่งลงบ้างเพื่อดูแลใจตัวเอง ไม่ใช่การยอมแพ้ แต่คือการสะสมเชื้อเพลิงไว้ก้าวต่อ' },
+    I: { el:'wind',  elName:'ลม',  desc:'นักเชื่อมโยงผู้คน ร่าเริง สร้างพลังบวก',
+         quote:'ความสุขที่แท้จริงอาจไม่ต้องวิ่งตามหา มีเพียงคุณที่สามารถมอบอิสระให้หัวใจของตัวเอง' },
+    S: { el:'water', elName:'น้ำ', desc:'ผู้โอบอุ้ม ใจเย็น เป็นผู้ฟังที่ดี เห็นอกเห็นใจผู้อื่น',
+         quote:'บางครั้งความสัมพันธ์ที่ดีอาจไม่ได้มาจากการดูแลคนอื่น แต่เริ่มจากหัวใจที่รักและเมตตาตัวเอง' },
+    C: { el:'earth', elName:'ดิน', desc:'นักวางแผน วิเคราะห์ ละเอียด และเน้นคุณภาพ',
+         quote:'ดินที่แตกร้าวไม่ได้แปลว่าพังทลาย วางความสมบูรณ์แบบลงบ้าง แล้วปล่อยให้ชีวิตได้เติบโตตามจังหวะของมัน' }
   };
 
   var QUESTIONS = [
-    { q: "เมื่อเริ่มโปรเจกต์ใหม่ สิ่งแรกที่คุณมักจะทำคือ...", options: [
-      { t: "ลงมือทำทันทีและผลักดันให้ทุกคนเดินหน้า", y: "D" },
-      { t: "ชวนทุกคนมาคุย แบ่งปันไอเดียและสร้างแรงบันดาลใจ", y: "I" },
-      { t: "พูดคุย วางแผนอย่างเป็นขั้นเป็นตอนร่วมกับทีม", y: "S" },
-      { t: "ค้นหาข้อมูล ศึกษาความเสี่ยงและรายละเอียดอย่างถี่ถ้วน", y: "C" }
-    ]},
-    { q: "เมื่อเจอปัญหาเฉพาะหน้าหรือเรื่องด่วน คุณมักจะ...", options: [
-      { t: "ตัดสินใจแก้ปัญหาอย่างรวดเร็วและเด็ดขาด", y: "D" },
-      { t: "ปรึกษาผู้คน มองหาทางเลือกที่สร้างสรรค์ร่วมกัน", y: "I" },
-      { t: "ตั้งสติ รักษาความสงบ และค่อย ๆ ประนีประนอมคลี่คลาย", y: "S" },
-      { t: "วิเคราะห์สาเหตุของปัญหาด้วยตรรกะและข้อมูล", y: "C" }
-    ]},
-    { q: "ในสายตาคนรอบข้าง คุณมักจะถูกจดจำในฐานะ...", options: [
-      { t: "คนตรงไปตรงมา มุ่งมั่นสู่เป้าหมาย", y: "D" },
-      { t: "คนที่ร่าเริง เข้ากับคนง่าย มีพลังบวกเสมอ", y: "I" },
-      { t: "คนที่ใจเย็น รับฟัง และไว้วางใจได้เสมอ", y: "S" },
-      { t: "คนที่มีระเบียบ ละเอียดรอบคอบ และแม่นยำ", y: "C" }
-    ]},
-    { q: "สภาพแวดล้อมในการทำงานที่คุณชอบที่สุดคือแบบไหน...", options: [
-      { t: "มีอิสระในการตัดสินใจ ท้าทาย และเห็นผลลัพธ์ชัดเจน", y: "D" },
-      { t: "สนุกสนาน มีการแลกเปลี่ยน และไม่ตึงเครียดจนเกินไป", y: "I" },
-      { t: "ร่วมมือกันอย่างเป็นมิตร สบายใจ และปลอดภัยทางความรู้สึก", y: "S" },
-      { t: "มีระบบระเบียบ ชัดเจน และมีมาตรฐานคุณภาพสูง", y: "C" }
-    ]},
-    { q: "เมื่อต้องตัดสินใจเรื่องที่มีผลกระทบสูง คุณจะยึด...", options: [
-      { t: "เป้าหมายและผลลัพธ์ปลายทางเป็นหลัก", y: "D" },
-      { t: "ความรู้สึกและความคิดเห็นของคนที่เกี่ยวข้อง", y: "I" },
-      { t: "ความมั่นคงและความพร้อมของทุกคนในทีม", y: "S" },
-      { t: "ข้อเท็จจริง ข้อมูลสถิติ และความถูกต้อง", y: "C" }
-    ]},
-    { q: "สิ่งที่คุณรู้สึกอึดอัดใจมากที่สุดในการทำงานร่วมกับผู้อื่นคือ...", options: [
-      { t: "ความล่าช้า ไม่กล้าตัดสินใจ", y: "D" },
-      { t: "ความตึงเครียด ไร้ชีวิตชีวา หรือบรรยากาศกดดัน", y: "I" },
-      { t: "ความขัดแย้ง ความไม่แน่นอน และการเปลี่ยนแปลงกะทันหัน", y: "S" },
-      { t: "ความสะเพร่า ไร้ระบบ หรือทำงานไม่มีมาตรฐาน", y: "C" }
-    ]},
-    { q: "เวลาว่างที่คุณรู้สึกได้ชาร์จพลังอย่างแท้จริงคือ...", options: [
-      { t: "ทำกิจกรรมท้าทายใหม่ ๆ หรือโปรเจกต์ที่ตื่นเต้น", y: "D" },
-      { t: "ออกไปพบปะเพื่อนฝูง สังสรรค์และแลกเปลี่ยนเรื่องราว", y: "I" },
-      { t: "พักผ่อนสบาย ๆ กับคนใกล้ชิดหรืออยู่กับธรรมชาติ", y: "S" },
-      { t: "มีเวลาส่วนตัวในการอ่านหนังสือ พัฒนาทักษะที่สนใจ", y: "C" }
-    ]},
-    { q: "คุณคาดหวังอะไรมากที่สุดจากการรู้จักตนเองในครั้งนี้...", options: [
-      { t: "เพิ่มขีดความสามารถและพัฒนาสู่ความสำเร็จที่สูงขึ้น", y: "D" },
-      { t: "สร้างความสัมพันธ์และความประทับใจที่ดีกับผู้คน", y: "I" },
-      { t: "ค้นพบความสงบ สมดุล และเข้าใจผู้อื่นลึกซึ้งยิ่งขึ้น", y: "S" },
-      { t: "เข้าใจโครงสร้างความคิดและมีแนวทางพัฒนาที่เป็นระบบ", y: "C" }
-    ]}
+    { q:"เมื่อได้รับมอบหมายงานใหม่ คุณมักจะ...", options:[
+      {t:"ลงมือทำทันทีและกำหนดทิศทางเอง", y:"D"},
+      {t:"ชวนคนอื่นมาคุยและระดมไอเดียร่วมกัน", y:"I"},
+      {t:"ค่อย ๆ วางแผนและทำงานร่วมกับทีมที่ไว้ใจ", y:"S"},
+      {t:"ศึกษารายละเอียดให้ครบก่อนเริ่มลงมือ", y:"C"} ]},
+    { q:"เวลาพูดคุยกับคนอื่น คุณมักจะ...", options:[
+      {t:"พูดตรงประเด็น เข้าเรื่องเร็ว", y:"D"},
+      {t:"พูดเยอะ สนุกสนาน ชวนคุยได้เรื่อย ๆ", y:"I"},
+      {t:"ฟังมากกว่าพูด ใจเย็น ไม่รีบ", y:"S"},
+      {t:"เลือกคำพูด คิดก่อนพูดเสมอ", y:"C"} ]},
+    { q:"เมื่อมีความคิดเห็นไม่ตรงกันในทีม คุณจะ...", options:[
+      {t:"บอกความเห็นตรง ๆ และผลักดันให้ได้ข้อสรุป", y:"D"},
+      {t:"พยายามหาจุดร่วมด้วยบรรยากาศที่เป็นมิตร", y:"I"},
+      {t:"ประนีประนอมและรักษาความสัมพันธ์ไว้ก่อน", y:"S"},
+      {t:"ขอข้อมูลเพิ่มก่อนตัดสินว่าใครถูก", y:"C"} ]},
+   { q:"ในงานปาร์ตี้หรือกิจกรรมกลุ่ม คุณมักจะ...", options:[
+      {t:"เป็นคนจัดการดูแลให้ทุกอย่างเดินไปได้", y:"D"},
+      {t:"เป็นคนทักทายและทำให้บรรยากาศสนุก", y:"I"},
+      {t:"อยู่กับกลุ่มเพื่อนสนิทไม่กี่คน", y:"S"},
+      {t:"สังเกตการณ์อยู่ห่าง ๆ ก่อนเข้าร่วม", y:"C"} ]},
+    { q:"เป้าหมายในการเข้าร่วมกิจกรรมครั้งนี้ใกล้เคียงข้อใดที่สุด...", options:[
+      {t:"อยากพัฒนาตัวเองให้ก้าวหน้าอีกขั้น", y:"D"},
+      {t:"อยากได้เพื่อนใหม่และแรงบันดาลใจ", y:"I"},
+      {t:"อยากได้ความสงบและสมดุลในชีวิต", y:"S"},
+      {t:"อยากเข้าใจตัวเองอย่างลึกซึ้งและถูกต้อง", y:"C"} ]}
   ];
 
-  var state = {
-    nickname: "",
-    job: "",
-    intent: "",
-    answers: new Array(QUESTIONS.length).fill(null),
-    qi: 0
-  };
+  var state = { nickname:"", job:"", intent:"", answers:new Array(QUESTIONS.length).fill(null), qi:0 };
 
-  var screenIntro  = document.getElementById('screen-intro');
-  var screenQuiz   = document.getElementById('screen-quiz');
-  var screenResult = document.getElementById('screen-result');
+  var screenIntro = document.getElementById('screen-intro');
+  var screenQuiz  = document.getElementById('screen-quiz');
+  var screenResult= document.getElementById('screen-result');
+  var screenAdmin = document.getElementById('screen-admin');
+  var screenAdminLogin = document.getElementById('screen-admin-login');
+  var btnAdmin = document.getElementById('btn-admin');
+  var adminPassword = document.getElementById('admin-password');
+  var adminError = document.getElementById('admin-error');
+  var ADMIN_PASSWORD = '072';
 
-  var inNick   = document.getElementById('in-nickname');
-  var inJob    = document.getElementById('in-job');
+  var inNick = document.getElementById('in-nickname');
+  var inJob  = document.getElementById('in-job');
   var inIntent = document.getElementById('in-intent');
   var btnStart = document.getElementById('btn-start');
 
-  function checkForm(){
+  function checkIntro(){
     btnStart.disabled = !(inNick.value.trim() && inJob.value.trim() && inIntent.value.trim());
   }
-  [inNick, inJob, inIntent].forEach(function(el){ el.addEventListener('input', checkForm); });
+  [inNick, inJob, inIntent].forEach(function(el){ el.addEventListener('input', checkIntro); });
+
+
+  var STORAGE_KEY = 'introduction_card_responses_v1';
+
+  function getResponses(){
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+    catch(e){ return []; }
+  }
+
+  function saveResponse(letter){
+    var responses = getResponses();
+    var meta = TYPES[letter];
+    responses.push({
+      time: new Date().toISOString(),
+      nickname: state.nickname,
+      job: state.job,
+      intent: state.intent,
+      element: meta.elName,
+      answers: state.answers.slice()
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
+  }
+
+  function esc(value){
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function(ch){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+    });
+  }
+
+  function formatDate(iso){
+    var d = new Date(iso);
+    if(isNaN(d.getTime())) return '-';
+    return d.toLocaleString('th-TH', {
+      year:'numeric', month:'2-digit', day:'2-digit',
+      hour:'2-digit', minute:'2-digit'
+    });
+  }
+
+  function renderAdmin(){
+    var responses = getResponses();
+    document.getElementById('admin-count').textContent = 'มีผู้กรอกข้อมูล ' + responses.length + ' คน';
+
+    if(!responses.length){
+      document.getElementById('admin-table').innerHTML =
+        '<div class="admin-empty">ยังไม่มีข้อมูลผู้เข้าร่วม</div>';
+      return;
+    }
+
+    var rows = responses.map(function(r, i){
+      return '<tr>' +
+        '<td>' + (i+1) + '</td>' +
+        '<td><strong>' + esc(r.nickname) + '</strong></td>' +
+        '<td>' + esc(r.job) + '</td>' +
+        '<td>' + esc(r.intent) + '</td>' +
+        '<td><span class="type-pill">' + esc(r.element) + '</span></td>' +
+        '<td>' + esc(formatDate(r.time)) + '</td>' +
+      '</tr>';
+    }).join('');
+
+    document.getElementById('admin-table').innerHTML =
+      '<table class="admin-table"><thead><tr>' +
+      '<th>#</th><th>ชื่อเล่น</th><th>แนะนำตัว</th><th>ความตั้งใจ</th><th>ธาตุ</th><th>เวลาส่ง</th>' +
+      '</tr></thead><tbody>' + rows + '</tbody></table>';
+  }
+
+  function downloadCSV(){
+    var responses = getResponses();
+    if(!responses.length){ alert('ยังไม่มีข้อมูลให้ดาวน์โหลด'); return; }
+
+    var header = ['ลำดับ','วันที่เวลา','ชื่อเล่น','แนะนำตัว','ความตั้งใจ','ธาตุ','คำตอบข้อ 1','คำตอบข้อ 2','คำตอบข้อ 3','คำตอบข้อ 4','คำตอบข้อ 5'];
+    var csvRows = [header].concat(responses.map(function(r,i){
+      return [
+        i+1, formatDate(r.time), r.nickname, r.job, r.intent, r.element
+      ].concat(r.answers || []).map(function(v){
+        return '"' + String(v == null ? '' : v).replace(/"/g,'""') + '"';
+      });
+    }));
+    var csv = '\uFEFF' + csvRows.map(function(row){ return row.join(','); }).join('\r\n');
+    var blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    var link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'participant-data-' + new Date().toISOString().slice(0,10) + '.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  btnAdmin.addEventListener('click', function(){
+    screenIntro.classList.add('hidden');
+    screenQuiz.classList.add('hidden');
+    screenResult.classList.add('hidden');
+    screenAdmin.classList.add('hidden');
+    screenAdminLogin.classList.remove('hidden');
+    adminPassword.value = '';
+    adminError.textContent = '';
+    setTimeout(function(){ adminPassword.focus(); }, 50);
+  });
+
+  function adminLogin(){
+    if(adminPassword.value === ADMIN_PASSWORD){
+      screenAdminLogin.classList.add('hidden');
+      screenAdmin.classList.remove('hidden');
+      renderAdmin();
+    } else {
+      adminError.textContent = 'รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่';
+      adminPassword.value = '';
+      adminPassword.focus();
+    }
+  }
+
+  document.getElementById('btn-admin-login').addEventListener('click', adminLogin);
+  adminPassword.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') adminLogin();
+  });
+
+  document.getElementById('btn-admin-login-cancel').addEventListener('click', function(){
+    screenAdminLogin.classList.add('hidden');
+    screenIntro.classList.remove('hidden');
+  });
+
+  document.getElementById('btn-admin-back').addEventListener('click', function(){
+    screenAdmin.classList.add('hidden');
+    screenIntro.classList.remove('hidden');
+  });
+
+  document.getElementById('btn-download-data').addEventListener('click', downloadCSV);
 
   btnStart.addEventListener('click', function(){
     state.nickname = inNick.value.trim();
@@ -533,122 +550,174 @@
     renderQuestion();
   });
 
-  var quizFill    = document.getElementById('quiz-fill');
-  var quizCount   = document.getElementById('quiz-count');
-  var quizQ       = document.getElementById('quiz-q');
+  var quizFill = document.getElementById('quiz-fill');
+  var quizCount = document.getElementById('quiz-count');
+  var quizQ = document.getElementById('quiz-q');
   var quizOptions = document.getElementById('quiz-options');
-  var btnBack     = document.getElementById('btn-back');
+  var btnBack = document.getElementById('btn-back');
+
+  function shuffled(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var tmp=a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+  }
 
   function renderQuestion(){
     var i = state.qi;
     var item = QUESTIONS[i];
-    quizFill.style.width = Math.round((i / QUESTIONS.length) * 100) + '%';
-    quizCount.textContent = (i + 1) + ' / ' + QUESTIONS.length;
+    quizFill.style.width = Math.round((i/QUESTIONS.length)*100) + '%';
+    quizCount.textContent = (i+1) + ' / ' + QUESTIONS.length;
     quizQ.textContent = item.q;
     quizOptions.innerHTML = '';
-
-    item.options.forEach(function(opt){
+    shuffled(item.options).forEach(function(opt){
       var b = document.createElement('button');
       b.className = 'option';
       b.type = 'button';
       b.textContent = opt.t;
-      if (state.answers[i] === opt.y) b.classList.add('selected');
-      b.addEventListener('click', function(){
-        selectOption(opt.y);
-      });
+      if(state.answers[i] === opt.y) b.classList.add('selected');
+      b.addEventListener('click', function(){ selectAnswer(opt.y); });
       quizOptions.appendChild(b);
     });
-    btnBack.style.visibility = (i === 0) ? 'hidden' : 'visible';
+    btnBack.style.visibility = i === 0 ? 'hidden' : 'visible';
   }
 
-  function selectOption(letter){
+  function selectAnswer(letter){
     state.answers[state.qi] = letter;
-    if (state.qi < QUESTIONS.length - 1) {
+    if(state.qi < QUESTIONS.length - 1){
       setTimeout(function(){
         state.qi++;
         renderQuestion();
-      }, 160);
+      }, 180);
     } else {
       quizFill.style.width = '100%';
-      setTimeout(showFinalCard, 220);
+      setTimeout(finishQuiz, 250);
     }
   }
 
   btnBack.addEventListener('click', function(){
-    if (state.qi > 0) {
-      state.qi--;
-      renderQuestion();
-    }
+    if(state.qi > 0){ state.qi--; renderQuestion(); }
   });
 
-  function showFinalCard(){
-    var tally = { D: 0, I: 0, S: 0, C: 0 };
-    state.answers.forEach(function(ans){ if (ans) tally[ans]++; });
-    var topType = 'S', maxScore = -1;
-    ['D', 'I', 'S', 'C'].forEach(function(key){
-      if (tally[key] > maxScore) {
-        maxScore = tally[key];
-        topType = key;
-      }
-    });
-
-    renderCardData(topType);
+  function finishQuiz(){
+    var tally = {D:0,I:0,S:0,C:0};
+    state.answers.forEach(function(a){ if(a) tally[a]++; });
+    var order = ['D','I','S','C'];
+    var best = 'S', bestScore = -1;
+    order.forEach(function(k){ if(tally[k] > bestScore){ bestScore = tally[k]; best = k; } });
+    renderResult(best);
+    saveResponse(best);
     screenQuiz.classList.add('hidden');
     screenResult.classList.remove('hidden');
   }
 
   var resultCard = document.getElementById('resultCard');
-  var medallion  = document.getElementById('medallion');
-  var typeBadge  = document.getElementById('type-badge');
-  var typeTitle  = document.getElementById('type-title');
-  var typeDesc   = document.getElementById('type-desc');
+  var medallion = document.getElementById('medallion');
+  var typeDesc = document.getElementById('type-desc');
+  var typeQuote = document.getElementById('type-quote');
 
-  function renderCardData(letter){
+  function renderResult(letter){
     var meta = TYPES[letter];
     resultCard.setAttribute('data-el', meta.el);
     medallion.innerHTML = ICONS[meta.el];
-    typeBadge.textContent = 'ธาตุ' + meta.elName + ' · ' + meta.enName;
-    typeTitle.textContent = meta.title;
-    typeDesc.textContent = meta.desc;
-
     document.getElementById('out-nickname').textContent = state.nickname;
     document.getElementById('out-job').textContent = state.job;
     document.getElementById('out-intent').textContent = state.intent;
+    typeDesc.textContent = 'คุณคือธาตุ' + meta.elName + ' ' + meta.desc;
+    typeQuote.textContent = meta.quote;
   }
 
   document.getElementById('btn-reset').addEventListener('click', function(){
-    state = { nickname: "", job: "", intent: "", answers: new Array(QUESTIONS.length).fill(null), qi: 0 };
+    state = { nickname:"", job:"", intent:"", answers:new Array(QUESTIONS.length).fill(null), qi:0 };
     inNick.value = ''; inJob.value = ''; inIntent.value = '';
-    checkForm();
+    checkIntro();
     screenResult.classList.add('hidden');
     screenIntro.classList.remove('hidden');
   });
 
-  document.getElementById('btn-save').addEventListener('click', function(){
+  document.getElementById('btn-save').addEventListener('click', async function(){
     var btn = this;
-    var origText = btn.textContent;
-    btn.textContent = 'กำลังประมวลผลรูปภาพ...';
+    var original = btn.textContent;
+    var safeName = (state.nickname || 'my-Introduction-card').replace(/[^a-zA-Z0-9ก-๙_-]+/g,'-');
+
+    btn.textContent = 'กำลังสร้างรูป...';
     btn.disabled = true;
 
-    html2canvas(resultCard, {
-      scale: 3,
-      backgroundColor: null,
-      useCORS: true,
-      logging: false
-    }).then(function(canvas){
-      var link = document.createElement('a');
-      var safeName = (state.nickname || 'disc-card').replace(/[^a-zA-Z0-9ก-๙_-]+/g, '-');
-      link.download = 'DISC-Card-' + safeName + '.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      btn.textContent = origText;
-      btn.disabled = false;
-    }).catch(function(err){
+    try {
+      var canvas = await html2canvas(resultCard, {
+        scale: Math.min(3, window.devicePixelRatio || 2),
+        backgroundColor: null,
+        useCORS: true,
+        allowTaint: false
+      });
+
+      canvas.toBlob(async function(blob){
+        if(!blob) throw new Error('ไม่สามารถสร้างไฟล์ภาพได้');
+
+        var fileName = 'Introduction-card-' + safeName + '.png';
+
+        // มือถือที่รองรับ Web Share จะเปิดเมนู "บันทึกภาพ/แชร์" ของเครื่อง
+        // วิธีนี้ใช้งานได้ดีกว่าการบังคับ <a download> บน iPhone/Safari
+        if (navigator.share && navigator.canShare) {
+          try {
+            var file = new File([blob], fileName, {type:'image/png'});
+            if (navigator.canShare({files:[file]})) {
+              await navigator.share({
+                files:[file],
+                title:'Introduction Card'
+              });
+              btn.textContent = original;
+              btn.disabled = false;
+              return;
+            }
+          } catch(e) {
+            if (e && e.name === 'AbortError') {
+              btn.textContent = original;
+              btn.disabled = false;
+              return;
+            }
+          }
+        }
+
+        // Android / Desktop / browser ที่รองรับ download ปกติ
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(function(){
+          URL.revokeObjectURL(url);
+          btn.textContent = original;
+          btn.disabled = false;
+        }, 1000);
+      }, 'image/png');
+
+    } catch(err) {
       console.error(err);
-      alert('บันทึกรูปไม่สำเร็จ กรุณาลองใหม่อีกครั้ง');
-      btn.textContent = origText;
+      btn.textContent = original;
       btn.disabled = false;
-    });
+
+      // Fallback: เปิดภาพในแท็บใหม่ ให้ผู้ใช้กดค้าง/บันทึกภาพได้บนมือถือ
+      try {
+        var canvas2 = await html2canvas(resultCard, {scale:2, backgroundColor:null, useCORS:true});
+        var imageUrl = canvas2.toDataURL('image/png');
+        var w = window.open();
+        if (w) {
+          w.document.write('<title>Introduction Card</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;background:#f7f3eb;display:flex;align-items:center;justify-content:center;min-height:100vh}img{max-width:100%;height:auto}</style><img src="' + imageUrl + '">');
+          w.document.close();
+        } else {
+          alert('ไม่สามารถเปิดรูปได้ กรุณาลองใหม่อีกครั้ง');
+        }
+      } catch(e2) {
+        alert('บันทึกรูปไม่สำเร็จ ลองใหม่อีกครั้ง');
+      }
+    }
   });
 
 })();
